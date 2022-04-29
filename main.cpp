@@ -3,7 +3,8 @@
 
 int	main(void)
 {
-	ft::vector<int>::value_type		a;
+	int 	b = 10;
+	ft::vector<int>::reference	a = b;
 	(void)a;
 	return (0);
 }

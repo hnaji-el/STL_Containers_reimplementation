@@ -21,13 +21,10 @@
 
 int	main(void)
 {
-	std::vector<int>	a(2);
+	std::vector<int>	a;
 
 	std::cout << a.size() << " " << a.capacity() << std::endl;
 
-	a.isert(3);
-
-	std::cout << a.size() << " " << a.capacity() << std::endl;
 
 	return (0);
 }
