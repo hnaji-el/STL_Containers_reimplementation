@@ -2,6 +2,7 @@
 #ifndef VECTOR_H
 # define VECTOR_H
 
+# include <iostream>
 # include <memory>
 
 namespace ft
@@ -12,9 +13,9 @@ class vector
 {
 private:
 	T*		_array;
-	Alloc&	_alloc;
-	// size
-	// capacity
+	Alloc	_alloc;		// ATT: Why type is Alloc  ?
+	size_t	size;		// ATT: Why type is size_t ?
+	size_t	capacity; 	// ATT: Why type is size_t ?
 
 
 public:

@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <memory>
 #include <vector>
 #include "Test1.hpp"
 #include "Test2.hpp"
@@ -21,10 +22,6 @@
 
 int	main(void)
 {
-	std::vector<int>	a;
-
-	std::cout << a.size() << " " << a.capacity() << std::endl;
-
-
+	std::allocator<int>	allocInt;
 	return (0);
 }

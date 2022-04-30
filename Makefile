@@ -5,7 +5,7 @@ SRCS = main.cpp
  
 HEADERS = vector.hpp
  
-COMPILER = c++
+COMPILER = c++ -std=c++98
  
 FLAGS = -Wall -Wextra -Werror
  
