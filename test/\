@@ -1,7 +1,6 @@
 
 #include <iostream>
 #include <memory>
-#include <exception>
 #include <vector>
 #include "Test1.hpp"
 #include "Test2.hpp"
@@ -36,36 +35,16 @@ public:
 
 };
 
-class Foo {
-private:
-	int const	_a;
-public:
-	Foo(int const a) : _a(a) 	{ std::cout << "Ctor called" << std::endl; }
-	~Foo(void) 			{ std::cout << "Dtor called" << std::endl; }
-
-};
+class Foo {};
 
 int	main(void)
 {
-	std::allocator<Foo>				allocObj;
-	std::allocator<Foo>::pointer	ptr;
+	int		a;
 
-	ptr = allocObj.allocate(1);
-	allocObj.construct(ptr, 10);
-
-//	std::allocator<int>				allocInt;
-//	std::allocator<int>::pointer	ptr;
-//	std::allocator<int>::size_type	sz;
-//
-//	try
-//	{
-//		ptr = allocInt.allocate(161168601273);
-//	}
-//	catch (std::exception& e)
-//	{
-//		std::cout << e.what() << std::endl;
-//	}
-
+	std::cout << a << std::endl;
+	new (&a) int(10);
+	std::cout << a << std::endl;
+	
 //	system("leaks a.out");
 
 //	int*	a = new int;// default initialized (gv)

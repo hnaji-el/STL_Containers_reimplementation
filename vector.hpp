@@ -19,7 +19,7 @@ private:
 
 
 public:
-	// typedefs ...
+	// members typedefs ...
 	typedef T											value_type;
 	typedef Alloc										allocator_type;
 	typedef typename allocator_type::reference			reference;
