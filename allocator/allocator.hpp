@@ -1,19 +1,22 @@
 
+#ifndef ALLOCATOR_H
+# define ALLOCATOR_H
+
 #include <iostream>
+
+namespace ft
+{
 
 template<class T>
 class allocator
 {
-private:
-	
-
 public:
 	// Member types ...
 	typedef T			value_type;
 	typedef T*			pointer;
-	typedef const T*	const_pointer;
+	typedef T const *	const_pointer;
 	typedef T&			reference;
-	typedef const T*	const_reference;
+	typedef T const &	const_reference;
 	typedef size_t		size_type;
 	typedef ptrdiff_t	difference_type;
 	template<class Type>
@@ -23,10 +26,23 @@ public:
 		}
 
 public:
-	// Constructors ...
+	// Constructors
 	allocator(void) throw();
 	allocator(allocator const & alloc) throw();
 	template<class U>
 		allocator(allocator<U> const & alloc) throw();
+	// Destructor
+	~allocator(void) throw();
+	// Address
+	pointer			address(reference x) 		const;
+	const_pointer	address(const_reference x) 	const;
+	// allocate
+	pointer allocate(size_type n, void const * hint = 0);
+	
 	
 };
+
+}
+
+#endif
+

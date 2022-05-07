@@ -36,8 +36,14 @@ int	main(void)
 	 * 1. THROWING ALLOCATION
 	 * void*	operator new (size_t size) throw(std::bad_alloc);
 	 */ 
-	Foo*	b = (Foo*) ::operator new (sizeof(Foo));
-//	Foo*	a = ::new Foo;// (Foo*) operator new (sizeof(Foo));
+//	Foo*	b = (Foo*) ::operator new (sizeof(Foo));
+	try
+	{
+		Foo*	a = ::new Foo;// (Foo*) operator new (sizeof(Foo));
+	}
+	catch (std::exception& e)
+	{
+	}
 
 	/*
 	 * 2. NOTHROW ALLOCATION
