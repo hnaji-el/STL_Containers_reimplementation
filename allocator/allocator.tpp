@@ -40,7 +40,7 @@ allocator<T>::pointer	allocator<T>::address(allocator<T>::reference x) const
 }
 
 template<class T>
-allocator<T>::const_pointer	allocator<T>::address(allocator<T>::const_reference x)	const
+allocator<T>::const_pointer	allocator<T>::address(allocator<T>::const_reference x) const
 {
 	return (&x);
 }
@@ -54,8 +54,18 @@ allocator<T>::pointer allocator<T>::allocate(allocator<T>::size_type n, void con
 {
 	allocator<T>::pointer	ptr;
 
-	ptr = (allocator<T>::pointer) ::operator new (n);
+	ptr = static_cast<allocator<T>::pointer>(::operator new (sizeof(value_type) * n));
 	return (ptr);
+}
+
+/* ---------------------------------------------------------------- */
+/*                        	 deallocate								*/
+/* ---------------------------------------------------------------- */
+
+template<class T>
+void 	allocator<T>::deallocate(allocator<T>::pointer p, allocator<T>::size_type n)
+{
+	::operator delete (p);
 }
 
 }

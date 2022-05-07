@@ -37,7 +37,10 @@ public:
 	pointer			address(reference x) 		const;
 	const_pointer	address(const_reference x) 	const;
 	// allocate
-	pointer allocate(size_type n, void const * hint = 0);
+	pointer allocate(size_type n, void const * hint = 0);// Throw std::bad_alloc
+	// deallocate
+	void 	deallocate(pointer p, size_type n);
+
 	
 	
 };

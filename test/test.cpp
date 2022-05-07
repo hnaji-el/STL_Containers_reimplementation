@@ -45,13 +45,34 @@ public:
 
 };
 
+struct Bar
+{
+private:
+	typedef	int	Integer;
+
+public:
+	Bar(void) 	{ std::cout << "Ctor <Bar>" << std::endl; }
+	~Bar(void) 	{ std::cout << "Dtor <Bar>" << std::endl; }
+	Integer		foo(Integer x);
+};
+
+Bar::Integer	Bar::foo(Bar::Integer x)
+{
+	std::cout << "foo" << std::endl;
+	Bar::Integer	z = x;
+	return (z);
+}
+
 int	main(void)
 {
-	std::allocator<Foo>				allocObj;
-	std::allocator<Foo>::pointer	ptr;
+	std::allocator<int>				allocInt;
+	std::allocator<int>::pointer	ptr;
 
-	ptr = allocObj.allocate(1);
-	allocObj.construct(ptr, 10);
+	ptr = allocInt.allocate(4);
+	allocInt.deallocate(ptr, 1);
+	ptr = allocInt.allocate(4);
+	system("leaks a.out");
+
 
 //	std::allocator<int>				allocInt;
 //	std::allocator<int>::pointer	ptr;
