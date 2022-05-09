@@ -34,13 +34,13 @@ allocator<T>::~allocator(void) throw()
 /* ---------------------------------------------------------------- */
 
 template<class T>
-allocator<T>::pointer	allocator<T>::address(allocator<T>::reference x) const
+typename allocator<T>::pointer	allocator<T>::address(allocator<T>::reference x) const
 {
 	return (&x);
 }
 
 template<class T>
-allocator<T>::const_pointer	allocator<T>::address(allocator<T>::const_reference x) const
+typename allocator<T>::const_pointer	allocator<T>::address(allocator<T>::const_reference x) const
 {
 	return (&x);
 }
@@ -50,10 +50,10 @@ allocator<T>::const_pointer	allocator<T>::address(allocator<T>::const_reference 
 /* ---------------------------------------------------------------- */
 
 template<class T>
-allocator<T>::pointer	allocator<T>::allocate(allocator<T>::size_type n,
-												void const * hint = 0)
+typename allocator<T>::pointer	allocator<T>::allocate(size_type n,
+												void const * hint)
 {
-	allocator<T>::pointer	ptr;
+	pointer	ptr;
 
 	(void)hint;
 	ptr = static_cast<allocator<T>::pointer>(::operator new (sizeof(value_type) * n));
@@ -89,7 +89,7 @@ void	allocator<T>::construct(allocator<T>::pointer p,
 template<class T>
 void	allocator<T>::destroy(allocator<T>::pointer p)
 {
-	p->~allocator<T>::value_type();
+	p->~T();
 }
 
 }

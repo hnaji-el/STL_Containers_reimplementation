@@ -1,8 +1,7 @@
 
-//#include "allocator.hpp"
-//#include "allocator.tpp"
+#include "allocator.hpp"
+#include "allocator.tpp"
 #include <iostream>
-#include <memory>
 
 struct Foo
 {
@@ -14,14 +13,15 @@ struct Foo
 
 int	main(void)
 {
-	std::allocator<Foo>				allocFoo;
-	std::allocator<Foo>::pointer	ptr;
+	ft::allocator<int>			allocInt;
+	ft::allocator<int>::pointer	ptr;
 
-	ptr = allocFoo.allocate(1);
-	(*ptr).~Foo();
-//	allocInt.construct(ptr, 10);
-//	allocInt.construct(10);
+	ptr = allocInt.allocate(2);
+//	allocInt.deallocate(ptr, 2);
+	ptr = allocInt.allocate(2);
+	ptr = allocInt.allocate(2);
 
+	system("leaks a.out");
 	return (0);
 }
 

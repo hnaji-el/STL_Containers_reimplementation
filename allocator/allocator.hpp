@@ -2,7 +2,8 @@
 #ifndef ALLOCATOR_H
 # define ALLOCATOR_H
 
-#include <iostream>
+# include <iostream>
+# include <new>
 
 namespace ft
 {
@@ -23,7 +24,7 @@ public:
 		struct rebind
 		{
 			typedef allocator<Type>	other;
-		}
+		};
 
 public:
 	// Constructors
