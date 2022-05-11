@@ -1,6 +1,6 @@
 
-#ifndef ALLOCATOR_H
-# define ALLOCATOR_H
+#ifndef ALLOCATOR_HPP
+# define ALLOCATOR_HPP
 
 # include <iostream>
 # include <new>
@@ -29,7 +29,7 @@ public:
 public:
 	// Constructors
 	allocator(void) throw();
-	allocator(allocator const & alloc) throw();
+	allocator(allocator<T> const & alloc) throw();
 	template<class U>
 		allocator(allocator<U> const & alloc) throw();
 	// Destructor
@@ -49,6 +49,8 @@ public:
 };
 
 }
+
+# include "allocator.tpp"
 
 #endif
 

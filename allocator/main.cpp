@@ -1,27 +1,18 @@
 
 #include "allocator.hpp"
-#include "allocator.tpp"
 #include <iostream>
-
-struct Foo
-{
-	int		_nb;
-
-	Foo(int nb) : _nb(nb) 	{ std::cout << "Ctor" << std::endl; }
-	~Foo(void)				{ std::cout << "Dtor" << std::endl; }
-};
 
 int	main(void)
 {
 	ft::allocator<int>			allocInt;
 	ft::allocator<int>::pointer	ptr;
-
+	
 	ptr = allocInt.allocate(2);
-//	allocInt.deallocate(ptr, 2);
-	ptr = allocInt.allocate(2);
-	ptr = allocInt.allocate(2);
-
-	system("leaks a.out");
+	allocInt.construct(ptr, 10);
+	allocInt.construct(ptr + 1, 20);
+	std::cout << ptr[0] << std::endl;
+	std::cout << ptr[1] << std::endl;
+	allocInt.destroy(ptr);
 	return (0);
 }
 

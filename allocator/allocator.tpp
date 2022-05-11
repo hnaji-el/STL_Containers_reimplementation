@@ -1,5 +1,6 @@
 
-#include "allocator.hpp"
+#ifndef	ALLOCATOR_TPP
+# define ALLOCATOR_TPP
 
 namespace ft
 {
@@ -14,14 +15,16 @@ allocator<T>::allocator(void) throw()
 }
 
 template<class T>
-allocator<T>::allocator(allocator const & alloc) throw()
+allocator<T>::allocator(allocator<T> const & alloc) throw()
 {
+	(void)alloc;
 }
 
 template<class T>
 template<class U>
 allocator<T>::allocator(allocator<U> const & alloc) throw()
 {
+	(void)alloc;
 }
 
 template<class T>
@@ -34,13 +37,13 @@ allocator<T>::~allocator(void) throw()
 /* ---------------------------------------------------------------- */
 
 template<class T>
-typename allocator<T>::pointer	allocator<T>::address(allocator<T>::reference x) const
+typename allocator<T>::pointer	allocator<T>::address(reference x) const
 {
 	return (&x);
 }
 
 template<class T>
-typename allocator<T>::const_pointer	allocator<T>::address(allocator<T>::const_reference x) const
+typename allocator<T>::const_pointer	allocator<T>::address(const_reference x) const
 {
 	return (&x);
 }
@@ -50,14 +53,10 @@ typename allocator<T>::const_pointer	allocator<T>::address(allocator<T>::const_r
 /* ---------------------------------------------------------------- */
 
 template<class T>
-typename allocator<T>::pointer	allocator<T>::allocate(size_type n,
-												void const * hint)
+typename allocator<T>::pointer	allocator<T>::allocate(size_type n, void const * hint)
 {
-	pointer	ptr;
-
 	(void)hint;
-	ptr = static_cast<allocator<T>::pointer>(::operator new (sizeof(value_type) * n));
-	return (ptr);
+	return (static_cast<pointer>(::operator new (sizeof(value_type) * n)));
 }
 
 /* ---------------------------------------------------------------- */
@@ -65,7 +64,7 @@ typename allocator<T>::pointer	allocator<T>::allocate(size_type n,
 /* ---------------------------------------------------------------- */
 
 template<class T>
-void 	allocator<T>::deallocate(allocator<T>::pointer p, allocator<T>::size_type n)
+void 	allocator<T>::deallocate(pointer p, size_type n)
 {
 	(void)n;
 	::operator delete (p);
@@ -76,8 +75,7 @@ void 	allocator<T>::deallocate(allocator<T>::pointer p, allocator<T>::size_type 
 /* ---------------------------------------------------------------- */
 
 template<class T>
-void	allocator<T>::construct(allocator<T>::pointer p,
-								allocator<T>::const_reference val)
+void	allocator<T>::construct(pointer p, const_reference val)
 {
 	new (p) value_type(val);
 }
@@ -87,10 +85,12 @@ void	allocator<T>::construct(allocator<T>::pointer p,
 /* ---------------------------------------------------------------- */
 
 template<class T>
-void	allocator<T>::destroy(allocator<T>::pointer p)
+void	allocator<T>::destroy(pointer p)
 {
-	p->~T();
+	p->~value_type();
 }
 
 }
+
+#endif
 
