@@ -15,16 +15,14 @@ allocator<T>::allocator(void) throw()
 }
 
 template<class T>
-allocator<T>::allocator(allocator<T> const & alloc) throw()
+allocator<T>::allocator(allocator<T> const &) throw()
 {
-	(void)alloc;
 }
 
 template<class T>
 template<class U>
-allocator<T>::allocator(allocator<U> const & alloc) throw()
+allocator<T>::allocator(allocator<U> const &) throw()
 {
-	(void)alloc;
 }
 
 template<class T>
@@ -53,9 +51,8 @@ typename allocator<T>::const_pointer	allocator<T>::address(const_reference x) co
 /* ---------------------------------------------------------------- */
 
 template<class T>
-typename allocator<T>::pointer	allocator<T>::allocate(size_type n, void const * hint)
+typename allocator<T>::pointer	allocator<T>::allocate(size_type n, void const *)
 {
-	(void)hint;
 	return (static_cast<pointer>(::operator new (sizeof(value_type) * n)));
 }
 
@@ -64,9 +61,8 @@ typename allocator<T>::pointer	allocator<T>::allocate(size_type n, void const * 
 /* ---------------------------------------------------------------- */
 
 template<class T>
-void 	allocator<T>::deallocate(pointer p, size_type n)
+void 	allocator<T>::deallocate(pointer p, size_type)
 {
-	(void)n;
 	::operator delete (p);
 }
 

@@ -2,8 +2,8 @@
 #ifndef ALLOCATOR_HPP
 # define ALLOCATOR_HPP
 
-# include <iostream>
 # include <new>
+# include <cstddef>
 
 namespace ft
 {
@@ -12,7 +12,7 @@ template<class T>
 class allocator
 {
 public:
-	// Member types ...
+	// Member types
 	typedef T			value_type;
 	typedef T*			pointer;
 	typedef T const *	const_pointer;
