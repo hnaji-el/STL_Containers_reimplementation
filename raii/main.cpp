@@ -1,6 +1,26 @@
 
 #include <iostream>
 
+template<class T>
+class Raii
+{
+private:
+	T*	_res;
+public:
+	Raii(T* res) : _res(res)
+	{
+	}
+	~Raii(void)
+	{
+		delete _res;
+	}
+	
+	T*	getRes(void) const
+	{
+		return (this->_res);
+	}
+};
+
 struct Resource
 {
 	Resource(void)
@@ -23,20 +43,21 @@ struct Resource
 
 };
 
+
+
 int	main(void)
 {
 	try
 	{
-		Resource*	ptr = new Resource; // Acquire the resource
-		// ptr->safeFunction(); // OK, no problem
-		ptr->unsafeFunction();
-		delete ptr; // Release the resource
+		Raii<Resource>	obj(new Resource);
+		// Resource*	ptr = new Resource; // Acquire the resource
+		obj.getRes()->unsafeFunction(); // OK, no problem
+//		ptr->unsafeFunction();
 	}
 	catch (std::exception& e)
 	{
 		std::cout << e.what() << std::endl;
 	}
-	system("leaks a.out");
 	return (0);
 }
 
