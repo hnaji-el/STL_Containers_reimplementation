@@ -1,6 +1,6 @@
 
-#ifndef VECTOR_H
-# define VECTOR_H
+#ifndef VECTOR_HPP
+# define VECTOR_HPP
 
 # include <iostream>
 # include <memory>
@@ -48,31 +48,4 @@ public:
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

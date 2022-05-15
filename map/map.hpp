@@ -5,7 +5,7 @@
 namespace ft
 {
 
-};
+}
 
 # include "map.tpp"
 
