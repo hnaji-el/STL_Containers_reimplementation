@@ -6,7 +6,7 @@ namespace ft
 {
 
 /* ---------------------------------------------------------------- */
-/*                  Constructors && Destructor						*/
+/*					Constructors && Destructor						*/
 /* ---------------------------------------------------------------- */
 
 template<class T>
@@ -31,7 +31,7 @@ allocator<T>::~allocator(void) throw()
 }
 
 /* ---------------------------------------------------------------- */
-/*                         	  address								*/
+/*								address								*/
 /* ---------------------------------------------------------------- */
 
 template<class T>
@@ -47,7 +47,7 @@ typename allocator<T>::const_pointer	allocator<T>::address(const_reference x) co
 }
 
 /* ---------------------------------------------------------------- */
-/*                        	 allocate								*/
+/*							allocate								*/
 /* ---------------------------------------------------------------- */
 
 template<class T>
@@ -57,7 +57,7 @@ typename allocator<T>::pointer	allocator<T>::allocate(size_type n, void const *)
 }
 
 /* ---------------------------------------------------------------- */
-/*                        	 deallocate								*/
+/*							deallocate								*/
 /* ---------------------------------------------------------------- */
 
 template<class T>
@@ -67,7 +67,7 @@ void 	allocator<T>::deallocate(pointer p, size_type)
 }
 
 /* ---------------------------------------------------------------- */
-/*                        	 construct								*/
+/*							construct								*/
 /* ---------------------------------------------------------------- */
 
 template<class T>
@@ -77,7 +77,7 @@ void	allocator<T>::construct(pointer p, const_reference val)
 }
 
 /* ---------------------------------------------------------------- */
-/*                        	 destroy								*/
+/*								destroy								*/
 /* ---------------------------------------------------------------- */
 
 template<class T>

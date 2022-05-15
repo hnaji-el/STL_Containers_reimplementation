@@ -4,6 +4,7 @@
 
 # include <iostream>
 # include <memory>
+# include <cstddef>
 
 namespace ft
 {
@@ -14,34 +15,23 @@ class vector
 private:
 	T*		_array;
 	Alloc	_alloc;		// ATT: Why type is Alloc  ?
-	size_t	size;		// ATT: Why type is size_t ?
-	size_t	capacity; 	// ATT: Why type is size_t ?
-
+	size_t	_size;		// ATT: Why type is size_t ?
+	size_t	_capacity; 	// ATT: Why type is size_t ?
 
 public:
-	// members typedefs ...
+	// member types
 	typedef T											value_type;
 	typedef Alloc										allocator_type;
 	typedef typename allocator_type::reference			reference;
-	typedef typename allocator_type::const_reference 	const_reference;
+	typedef typename allocator_type::const_reference	const_reference;
 	typedef typename allocator_type::pointer			pointer;
-	typedef typename allocator_type::const_pointer 		const_pointer;
-	typedef size_t										size_type;// ?
-	// iterators + difference_type + size_type
-	// ...
-	
-	// constructors ...
-	explicit vector(const allocator_type& alloc = allocator_type()) : _alloc(alloc), _array(NULL)
-	{
-		;
-	}
+	typedef typename allocator_type::const_pointer		const_pointer;
+	typedef ptrdiff_t									difference_type;
+	typedef size_t										size_type;
 
-	explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
-
-	template <class InputIterator>
-    vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
-
-	vector(const vector& x);
+public:
+	// Constructors
+	explicit vector(const allocator_type& alloc = allocator_type());
 
 };
 
