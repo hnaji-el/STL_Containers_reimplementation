@@ -8,6 +8,7 @@ HEADERS = vector.hpp vector.tpp
 COMPILER = c++ -std=c++98
 
 FLAGS = -Wall -Wextra -Werror
+
  
 all: $(NAME)
  
