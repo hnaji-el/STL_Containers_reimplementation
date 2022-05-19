@@ -7,7 +7,7 @@ HEADERS = vector.hpp vector.tpp
  
 COMPILER = c++ -std=c++98
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror # -g -fsanitize=address
 
  
 all: $(NAME)

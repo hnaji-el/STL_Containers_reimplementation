@@ -14,9 +14,9 @@ class vector
 {
 private:
 	T*		_array;
-	Alloc	_alloc;		// ATT: Why type is Alloc  ?
-	size_t	_size;		// ATT: Why type is size_t ?
-	size_t	_capacity; 	// ATT: Why type is size_t ?
+	Alloc	_alloc;
+	size_t	_size;
+	size_t	_capacity;
 
 public:
 	// member types
@@ -32,10 +32,16 @@ public:
 public:
 	// Constructors
 	explicit vector(const allocator_type& alloc = allocator_type());
+	explicit vector(size_type n,
+					const value_type& val = value_type(),
+					const allocator_type& alloc = allocator_type()
+					);
 
 };
 
 }
+
+# include "vector.tpp"
 
 #endif
 
