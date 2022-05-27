@@ -22,8 +22,51 @@ vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator_typ
 	}
 }
 
+template<class T, class Alloc>
+typename vector<T, Alloc>::size_type	vector<T, Alloc>::size(void) const
+{
+	return (this->_size);
+}
+
+}
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::size_type	vector<T, Alloc>::capacity(void) const
+{
+	return (this->_capacity);
+}
 
 }
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

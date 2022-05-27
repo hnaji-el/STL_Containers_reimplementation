@@ -2,21 +2,20 @@
 #include "vector.hpp"
 #include <iostream>
 #include <vector>
-
-struct Foo
-{
-	Foo(void)	{ std::cout << "Ctor" << std::endl; }
-	Foo(Foo const &)	{ std::cout << "copy Ctor" << std::endl; }
-	~Foo(void)	{ std::cout << "Dtor" << std::endl; }
-};
+#include <memory>
+#include <limits>
 
 int	main(void)
 {
-	ft::vector<Foo>	vecOfFoo(10, Foo());
-
-//	std::cout << vecOfFoo.size() << std::endl;
-//	std::cout << vecOfFoo.capacity() << std::endl;
-
+//	std::vector<int>	vec;
+//	std::allocator<int>	alloc;
+//
+//	std::cout << vec.max_size() << std::endl;
+//	std::cout << alloc.max_size() << std::endl;
+	std::cout << std::numeric_limits<int>::max() << std::endl;
+	std::cout << std::numeric_limits<char>::max() << std::endl;
+	std::cout << std::numeric_limits<long>::max() << std::endl;
+	std::cout << std::numeric_limits<unsigned int>::max() << std::endl;
 
 	return (0);
 }
