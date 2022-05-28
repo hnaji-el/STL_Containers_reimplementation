@@ -39,8 +39,9 @@ public:
 
 	// Capacity:
 	size_type	size(void) const;
+	size_type 	max_size(void) const;
 	size_type 	capacity(void) const;
-
+	bool 		empty(void) const;
 
 };
 
