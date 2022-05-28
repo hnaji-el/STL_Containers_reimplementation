@@ -67,6 +67,19 @@ void 	allocator<T>::deallocate(pointer p, size_type)
 }
 
 /* ---------------------------------------------------------------- */
+/*                              max_size                            */
+/* ---------------------------------------------------------------- */
+
+template<class T>
+typename allocator<T>::size_type allocator<T>::max_size(void) const throw()
+{
+	size_type	max_size;
+
+	max_size = std::numeric_limits<size_type>::max();
+	return (max_size / sizeof(value_type));
+}
+
+/* ---------------------------------------------------------------- */
 /*                              construct                           */
 /* ---------------------------------------------------------------- */
 

@@ -39,6 +39,12 @@ typename vector<T, Alloc>::size_type	vector<T, Alloc>::size(void) const
 template<class T, class Alloc>
 typename vector<T, Alloc>::size_type 	vector<T, Alloc>::max_size(void) const
 {
+	size_type	max_size;
+
+	max_size = this->_alloc.max_size();
+	if (sizeof(value_type) == 1)
+		return (max_size / 2);
+	return (max_size);
 }
 
 template<class T, class Alloc>

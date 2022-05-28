@@ -41,6 +41,8 @@ public:
 	pointer allocate(size_type n, void const * hint = 0);// Throw std::bad_alloc
 	// deallocate
 	void 	deallocate(pointer p, size_type n);
+	// max_size
+	size_type max_size() const throw();
 	// construct
 	void	construct(pointer p, const_reference val);
 	// destroy
