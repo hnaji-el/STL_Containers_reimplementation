@@ -6,6 +6,8 @@
 # include <memory>
 # include <cstddef>
 # include <limits>
+# include <exception>
+# include <stdexcept>
 
 namespace ft
 {
@@ -41,9 +43,15 @@ public:
 	// Capacity:
 	size_type	size(void) const;
 	size_type 	max_size(void) const;
-	void 		resize(size_type n, value_type val = value_type());
+	// void 		resize(size_type n, value_type val = value_type());
 	size_type 	capacity(void) const;
 	bool 		empty(void) const;
+
+	// Element access:
+	reference 		operator[](size_type n);
+	const_reference operator[](size_type n) const;
+	reference 		at(size_type n);
+	const_reference at(size_type n) const;
 
 };
 
@@ -52,4 +60,21 @@ public:
 # include "vector.tpp"
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

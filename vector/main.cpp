@@ -13,21 +13,41 @@ struct Foo
 
 int	main(void)
 {
-	std::vector<int>	*a = new std::vector<int>();
+	std::vector<int>	a;
 
-	a[0] = 100;
-//	Foo		obj;
+
+//	try
+//	{
+//		throw std::out_of_range("vector");
+//	}
+//	catch (std::out_of_range& e)
+//	{
+//		std::cout << e.what() << std::endl;
+//	}
+
+//	for (size_t i = 1; i <= 10; i++) 	{ a.push_back(i); 			}
+//	for (size_t i = 0; i < 10; i++)		{ std::cout << a[i] << " "; }
+//	std::cout << std::endl << a.size() << " " << a.capacity() << std::endl;
+//	// [1 2 3 4 5 6 7 8 9 10]
 //
-//	std::cout << "-----------" << std::endl;
-//	ft::vector<Foo>	a(5, obj);
-//	std::cout << a.size() << std::endl;
-//	std::cout << a.capacity() << std::endl;
-//	std::cout << "-----------" << std::endl;
-//	a.resize(3);
-//	std::cout << "-----------" << std::endl;
-//	std::cout << a.size() << std::endl;
-//	std::cout << a.capacity() << std::endl;
-//	std::cout << "-----------" << std::endl;
+//	a.resize(5);
+//	std::cout << a.size() << " " << a.capacity() << std::endl;
+//	// [1 2 3 4 5]
+//
+//	a.resize(8,100);
+//	for (size_t i = 0; i < a.size(); i++)	{ std::cout << a[i] << " "; }
+//	std::cout << std::endl << a.size() << " " << a.capacity() << std::endl;
+//	// [1 2 3 4 5 100 100 100]
+//
+//	a.resize(12);
+//	for (size_t i = 0; i < a.size(); i++)	{ std::cout << a[i] << " "; }
+//	std::cout << std::endl << a.size() << " " << a.capacity() << std::endl;
+//	// [1 2 3 4 5 100 100 100 0 0 0 0]
+//	
+//	a.resize(18, 3);
+//	for (size_t i = 0; i < a.size(); i++)	{ std::cout << a[i] << " "; }
+//	std::cout << std::endl << a.size() << " " << a.capacity() << std::endl;
+//	// [1 2 3 4 5 100 100 100 0 0 0 0 3 3 3 3 3 3]
 
 	return (0);
 }

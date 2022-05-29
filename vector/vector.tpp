@@ -47,20 +47,20 @@ typename vector<T, Alloc>::size_type 	vector<T, Alloc>::max_size(void) const
 	return (max_size);
 }
 
-template<class T, class Alloc>
-void	vector<T, Alloc>::resize(size_type n, value_type)
-{
-	/* CASE#1: n < _size */
-	if (n < this->_size)
-	{
-		while (this->_size > n)
-		{
-			this->_size--;
-			this->_alloc.destroy(this->_array + this->_size);
-		}
-	}
-	/* CASE#2: n > _size */
-}
+// template<class T, class Alloc>
+// void	vector<T, Alloc>::resize(size_type n, value_type)
+// {
+// 	/* CASE#1: n < size */
+// 	if (n < this->_size)
+// 	{
+// 		while (this->_size > n)
+// 		{
+// 			this->_size--;
+// 			this->_alloc.destroy(this->_array + this->_size);
+// 		}
+// 	}
+// 	/* CASE#2: n > _size */
+// }
 
 template<class T, class Alloc>
 typename vector<T, Alloc>::size_type	vector<T, Alloc>::capacity(void) const
@@ -74,6 +74,42 @@ bool	vector<T, Alloc>::empty(void) const
 	if (this->_size == 0)
 		return (true);
 	return (false);
+}
+
+/*----------------------------------------------------------------------------*/
+/*----------------------        Element access      --------------------------*/
+/*----------------------------------------------------------------------------*/
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::reference		vector<T, Alloc>::operator[](size_type n)
+{
+	return (this->_array[n]);
+}
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::const_reference vector<T, Alloc>::operator[](size_type n) const
+{
+	return (this->_array[n]);
+}
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::reference		vector<T, Alloc>::at(size_type n)
+{
+	if (n >= this->_size)
+	{
+		throw std::out_of_range("vector");
+	}
+	return (this->_array[n]);
+}
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::const_reference vector<T, Alloc>::at(size_type n) const
+{
+	if (n >= this->_size)
+	{
+		throw std::out_of_range("vector");
+	}
+	return (this->_array[n]);
 }
 
 }
