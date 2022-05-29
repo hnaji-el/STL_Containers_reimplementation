@@ -48,6 +48,21 @@ typename vector<T, Alloc>::size_type 	vector<T, Alloc>::max_size(void) const
 }
 
 template<class T, class Alloc>
+void	vector<T, Alloc>::resize(size_type n, value_type)
+{
+	/* CASE#1: n < _size */
+	if (n < this->_size)
+	{
+		while (this->_size > n)
+		{
+			this->_size--;
+			this->_alloc.destroy(this->_array + this->_size);
+		}
+	}
+	/* CASE#2: n > _size */
+}
+
+template<class T, class Alloc>
 typename vector<T, Alloc>::size_type	vector<T, Alloc>::capacity(void) const
 {
 	return (this->_capacity);
