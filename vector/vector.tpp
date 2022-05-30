@@ -6,7 +6,7 @@ namespace ft
 {
 
 /*----------------------------------------------------------------------------*/
-/*----------------------        Constructors        --------------------------*/
+/*---------------------- Constructors && Destructor --------------------------*/
 /*----------------------------------------------------------------------------*/
 
 template<class T, class Alloc>
@@ -21,9 +21,15 @@ vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator_typ
 {
 	this->_array = this->_alloc.allocate(n);
 	for (size_t i = 0; i < n; i++)
-	{
 		this->_alloc.construct(this->_array + i, val);
-	}
+}
+
+template<class T, class Alloc>
+vector<T, Alloc>::~vector(void)
+{
+	for (size_t	i = 0; i < this->_size; i++)
+		this->_alloc.destroy(this->_array + i);
+	this->_alloc.deallocate(this->_array, this->_capacity);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -81,7 +87,7 @@ bool	vector<T, Alloc>::empty(void) const
 /*----------------------------------------------------------------------------*/
 
 template<class T, class Alloc>
-typename vector<T, Alloc>::reference		vector<T, Alloc>::operator[](size_type n)
+typename vector<T, Alloc>::reference	vector<T, Alloc>::operator[](size_type n)
 {
 	return (this->_array[n]);
 }
@@ -93,12 +99,10 @@ typename vector<T, Alloc>::const_reference vector<T, Alloc>::operator[](size_typ
 }
 
 template<class T, class Alloc>
-typename vector<T, Alloc>::reference		vector<T, Alloc>::at(size_type n)
+typename vector<T, Alloc>::reference	vector<T, Alloc>::at(size_type n)
 {
 	if (n >= this->_size)
-	{
 		throw std::out_of_range("vector");
-	}
 	return (this->_array[n]);
 }
 
@@ -106,10 +110,32 @@ template<class T, class Alloc>
 typename vector<T, Alloc>::const_reference vector<T, Alloc>::at(size_type n) const
 {
 	if (n >= this->_size)
-	{
 		throw std::out_of_range("vector");
-	}
 	return (this->_array[n]);
+}
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::reference	vector<T, Alloc>::front(void)
+{
+	return (this->_array[0]);
+}
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::const_reference	vector<T, Alloc>::front(void) const
+{
+	return (this->_array[0]);
+}
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::reference	vector<T, Alloc>::back(void)
+{
+	return (this->_array[this->_size - 1]);
+}
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::const_reference	vector<T, Alloc>::back(void) const
+{
+	return (this->_array[this->_size - 1]);
 }
 
 }

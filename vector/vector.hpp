@@ -22,7 +22,7 @@ private:
 	size_t	_capacity;
 
 public:
-	// member types
+	// 	member types
 	typedef T											value_type;
 	typedef Alloc										allocator_type;
 	typedef typename allocator_type::reference			reference;
@@ -33,25 +33,32 @@ public:
 	typedef size_t										size_type;
 
 public:
-	// Constructors
+	// 	Constructors
 	explicit vector(const allocator_type& alloc = allocator_type());
 	explicit vector(size_type n,
 					const value_type& val = value_type(),
 					const allocator_type& alloc = allocator_type()
 					); /* Throw exception [std::bad_alloc] */
+	~vector(void);
 
-	// Capacity:
+	//	Capacity:
 	size_type	size(void) const;
 	size_type 	max_size(void) const;
 	// void 		resize(size_type n, value_type val = value_type());
 	size_type 	capacity(void) const;
 	bool 		empty(void) const;
 
-	// Element access:
+	// 	Element access:
 	reference 		operator[](size_type n);
 	const_reference operator[](size_type n) const;
 	reference 		at(size_type n);
 	const_reference at(size_type n) const;
+	reference		front(void);
+	const_reference	front(void) const;
+	reference 		back(void);
+	const_reference	back(void) const;
+
+	//	Modifiers:
 
 };
 

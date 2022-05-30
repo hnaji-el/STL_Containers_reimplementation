@@ -15,15 +15,17 @@ int	main(void)
 {
 	std::vector<int>	a;
 
+	std::cout << a.size() << " " << a.capacity() << std::endl;
+	for (size_t i = 0; i < 180; i++)
+	{
+		a.push_back(i);
+		std::cout << a.size() << " " << a.capacity() << std::endl;
+	}
 
-//	try
-//	{
-//		throw std::out_of_range("vector");
-//	}
-//	catch (std::out_of_range& e)
-//	{
-//		std::cout << e.what() << std::endl;
-//	}
+	std::cout << "----------------------" << std::endl;
+
+	return (0);
+}
 
 //	for (size_t i = 1; i <= 10; i++) 	{ a.push_back(i); 			}
 //	for (size_t i = 0; i < 10; i++)		{ std::cout << a[i] << " "; }
@@ -48,9 +50,6 @@ int	main(void)
 //	for (size_t i = 0; i < a.size(); i++)	{ std::cout << a[i] << " "; }
 //	std::cout << std::endl << a.size() << " " << a.capacity() << std::endl;
 //	// [1 2 3 4 5 100 100 100 0 0 0 0 3 3 3 3 3 3]
-
-	return (0);
-}
 
 /*
  * SYNTAX: 
