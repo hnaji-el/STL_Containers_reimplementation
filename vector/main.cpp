@@ -1,5 +1,5 @@
 
-#include "vector.hpp"
+// #include "vector.hpp"
 #include <iostream>
 #include <vector>
 
@@ -13,16 +13,13 @@ struct Foo
 
 int	main(void)
 {
-	std::vector<int>	a;
+	std::vector<Foo>	a(2);
 
 	std::cout << a.size() << " " << a.capacity() << std::endl;
-	for (size_t i = 0; i < 180; i++)
-	{
-		a.push_back(i);
-		std::cout << a.size() << " " << a.capacity() << std::endl;
-	}
 
-	std::cout << "----------------------" << std::endl;
+	a.reserve(I);
+
+	std::cout << a.size() << " " << a.capacity() << std::endl;
 
 	return (0);
 }

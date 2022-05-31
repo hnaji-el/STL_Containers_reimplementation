@@ -82,6 +82,26 @@ bool	vector<T, Alloc>::empty(void) const
 	return (false);
 }
 
+template<class T, class Alloc>
+void	vector<T, Alloc>::reserve(size_type n)
+{
+	// Case#1: n <= capacity -> Do nothing
+	// Case#2: n > capacity  -> Reallocation to n
+	value_type*		tempPtr;
+
+	if (n > this->_capacity)
+	{
+		tempPtr = this->_array;
+		this->_array = this->_alloc.allocate(n);
+		for (size_t i = 0; i < this->_size; i++)
+		{
+			this->_array[i] = tempArray[i];
+		}
+		this->
+		this->_capacity = n;
+	}
+}
+
 /*----------------------------------------------------------------------------*/
 /*----------------------        Element access      --------------------------*/
 /*----------------------------------------------------------------------------*/
