@@ -21,14 +21,18 @@ vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator_typ
 {
 	this->_array = this->_alloc.allocate(n);
 	for (size_t i = 0; i < n; i++)
+	{
 		this->_alloc.construct(this->_array + i, val);
+	}
 }
 
 template<class T, class Alloc>
 vector<T, Alloc>::~vector(void)
 {
 	for (size_t	i = 0; i < this->_size; i++)
+	{
 		this->_alloc.destroy(this->_array + i);
+	}
 	this->_alloc.deallocate(this->_array, this->_capacity);
 }
 
@@ -53,20 +57,20 @@ typename vector<T, Alloc>::size_type 	vector<T, Alloc>::max_size(void) const
 	return (max_size);
 }
 
-// template<class T, class Alloc>
-// void	vector<T, Alloc>::resize(size_type n, value_type)
-// {
-// 	/* CASE#1: n < size */
-// 	if (n < this->_size)
-// 	{
-// 		while (this->_size > n)
-// 		{
-// 			this->_size--;
-// 			this->_alloc.destroy(this->_array + this->_size);
-// 		}
-// 	}
-// 	/* CASE#2: n > _size */
-// }
+template<class T, class Alloc>
+void	vector<T, Alloc>::resize(size_type n, value_type val)
+{
+	/* CASE#1: n < size */
+	if (n < this->_size)
+	{
+		while (this->_size > n)
+		{
+			this->_size--;
+			this->_alloc.destroy(this->_array + this->_size);
+		}
+	}
+	/* CASE#2: n > _size */
+}
 
 template<class T, class Alloc>
 typename vector<T, Alloc>::size_type	vector<T, Alloc>::capacity(void) const
@@ -85,21 +89,23 @@ bool	vector<T, Alloc>::empty(void) const
 template<class T, class Alloc>
 void	vector<T, Alloc>::reserve(size_type n)
 {
-	// Case#1: n <= capacity -> Do nothing
-	// Case#2: n > capacity  -> Reallocation to n
-	value_type*		tempPtr;
+	value_type*		tempPtr = this->_array;
 
-	if (n > this->_capacity)
+	if (n <= this->_capacity)
+		return ;
+	if (n > this->max_size())
+		throw std::length_error("vector");
+	this->_array = this->_alloc.allocate(n);
+	for (size_t i = 0; i < this->_size; i++)
 	{
-		tempPtr = this->_array;
-		this->_array = this->_alloc.allocate(n);
-		for (size_t i = 0; i < this->_size; i++)
-		{
-			this->_array[i] = tempArray[i];
-		}
-		this->
-		this->_capacity = n;
+		this->_alloc.construct(this->_array + i, *(tempPtr + i));
 	}
+	for (size_t i = 0; i < this->_size; i++)
+	{
+		this->_alloc.destroy(tempPtr + i);
+	}
+	this->_alloc.deallocate(tempPtr, this->_capacity);
+	this->_capacity = n;
 }
 
 /*----------------------------------------------------------------------------*/
