@@ -1,3 +1,4 @@
+
 #include "vector.hpp"
 #include <iostream>
 #include <vector>
@@ -18,11 +19,15 @@ struct Foo
 
 int	main(void)
 {
-	std::vector<Foo>	a(2, Foo());
+	ft::vector<Foo>	a(5, Foo());
 
 	std::cout << a.size() << " " << a.capacity() << std::endl;
 
-	a.resize(1);
+	 a.clear();
+
+	std::cout << a.size() << " " << a.capacity() << std::endl;
+
+	a.clear();
 
 	std::cout << a.size() << " " << a.capacity() << std::endl;
 

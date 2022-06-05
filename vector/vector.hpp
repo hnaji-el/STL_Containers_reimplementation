@@ -60,6 +60,7 @@ public:
 	const_reference	back(void) const;
 
 	//	Modifiers:
+	void	clear(void);
 
 };
 

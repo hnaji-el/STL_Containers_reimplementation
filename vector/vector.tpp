@@ -60,16 +60,37 @@ typename vector<T, Alloc>::size_type 	vector<T, Alloc>::max_size(void) const
 template<class T, class Alloc>
 void	vector<T, Alloc>::resize(size_type n, value_type val)
 {
-	/* CASE#1: n < size */
+	value_type*		tempPtr = this->_array;
+	size_type		doubleCapacity = this->_capacity * 2;
+
 	if (n < this->_size)
 	{
-		while (this->_size > n)
+		for (; this->_size > n; this->_size--)
+			this->_alloc.destroy(this->_array + this->_size - 1);
+	}
+	if (n > this->_size)
+	{
+		if (n <= this->_capacity)
 		{
-			this->_size--;
-			this->_alloc.destroy(this->_array + this->_size);
+			for (; this->_size < n; this->_size++)
+				this->_alloc.construct(this->_array + this->_size, val);
+		}
+		else
+		{
+			if (n <= doubleCapacity)
+				this->_array = this->_alloc.allocate(doubleCapacity);
+			else
+				this->_array = this->_alloc.allocate(n);
+			for (size_t i = 0; i < this->_size; i++)
+				this->_alloc.construct(this->_array + i, tempPtr[i]);
+			for (; this->_size < n; this->_size++)
+				this->_alloc.construct(this->_array + this->_size, val);
+			for (size_t i = 0; i < this->_size; i++)
+				this->_alloc.destroy(tempPtr + i);
+			this->_alloc.deallocate(tempPtr, this->_capacity);
+			this->_capacity = (n <= doubleCapacity) ? doubleCapacity : n;
 		}
 	}
-	/* CASE#2: n > _size */
 }
 
 template<class T, class Alloc>
@@ -162,6 +183,20 @@ template<class T, class Alloc>
 typename vector<T, Alloc>::const_reference	vector<T, Alloc>::back(void) const
 {
 	return (this->_array[this->_size - 1]);
+}
+
+/*----------------------------------------------------------------------------*/
+/*----------------------          Modifiers         --------------------------*/
+/*----------------------------------------------------------------------------*/
+
+template<class T, class Alloc>
+void	vector<T, Alloc>::clear(void)
+{
+	while (this->_size > 0)
+	{
+		this->_size--;
+		this->_alloc.destroy(this->_array + this->_size);
+	}
 }
 
 }
