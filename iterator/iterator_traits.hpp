@@ -3,6 +3,7 @@
 # define  ITERATOR_TRAITS_HPP
 
 # include <cstddef>
+# include <iterator>
 
 namespace ft
 {

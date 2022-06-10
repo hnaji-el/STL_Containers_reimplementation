@@ -2,6 +2,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+# include "vector_iterator.hpp" // NOTE: ...
 # include <iostream>
 # include <memory>
 # include <cstddef>
@@ -31,6 +32,7 @@ public:
 	typedef typename allocator_type::const_pointer		const_pointer;
 	typedef ptrdiff_t									difference_type;
 	typedef size_t										size_type;
+	typedef vector_iterator<vector<T, Alloc>>			iterator; // NOTE: ...
 
 public:
 	// 	Constructors
@@ -40,6 +42,10 @@ public:
 					const allocator_type& alloc = allocator_type()
 					); /* Throw exception [std::bad_alloc] */
 	~vector(void);
+
+	// Iterators: ...
+	iterator	begin(void); // NOTE: ...
+	iterator	end(void); // NOTE: ...
 
 	//	Capacity:
 	size_type	size(void) const;
@@ -69,21 +75,4 @@ public:
 # include "vector.tpp"
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

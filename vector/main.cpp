@@ -1,22 +1,34 @@
 
-#include "vector.hpp"
+// #include "vector.hpp"
 #include "../iterator/iterator_traits.hpp"
 #include <iostream>
 #include <vector>
 #include <iterator>
 
+
+
+if (_
+else
+if
+
+
+
+
+
+class Foo
+{
+private:
+	int		_a;
+public:
+	Foo(int a) 
+
+}
+
 int	main(void)
 {
-	std::vector<int>			vec(4);
-	std::vector<int>::iterator	it;
+	int*	ptr = NULL;
 
-	for (size_t i = 0; i < 4; i++)
-		vec[i] = i; // 0 1 2 3
-
-	it = vec.begin();
-
-	*it = 40;
-	std::cout << *it << std::endl;
+	*ptr = 10;
 	
 	//	std::cout << "TEST#1: std::reserve() VS ft::reserve()" << std::endl;
 	//	{

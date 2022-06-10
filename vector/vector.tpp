@@ -37,6 +37,22 @@ vector<T, Alloc>::~vector(void)
 }
 
 /*----------------------------------------------------------------------------*/
+/*----------------------          Iterators         --------------------------*/
+/*----------------------------------------------------------------------------*/
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::iterator		vector<T, Alloc>::begin(void)
+{
+	return (iterator(this->_array));
+}
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::iterator		vector<T, Alloc>::end(void)
+{
+	return (iterator(this->_array + this->_size));
+}
+
+/*----------------------------------------------------------------------------*/
 /*----------------------          Capacity          --------------------------*/
 /*----------------------------------------------------------------------------*/
 
