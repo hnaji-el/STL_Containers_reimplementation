@@ -1,36 +1,23 @@
 
 #include "vector.hpp"
+#include "../iterator/iterator_traits.hpp"
 #include <iostream>
 #include <vector>
-
-#define RESET   "\033[0m"
-#define RED     "\033[31m"
-#define GREEN   "\033[32m"
-
-struct Foo
-{
-	Foo(void)						{ std::cout << "Ctor" << std::endl; }
-	Foo(Foo const &) 				{ std::cout << "Copy Ctor" << std::endl; }
-	void	operator=(Foo const &) 	{ std::cout << "Copy assignment" << std::endl; }
-	~Foo(void)						{ std::cout << "Dtor" << std::endl; }
-
-	Foo(int) 						{ std::cout << "Int Ctor" << std::endl; }
-};
+#include <iterator>
 
 int	main(void)
 {
-	ft::vector<Foo>	a(5, Foo());
+	std::vector<int>			vec(4);
+	std::vector<int>::iterator	it;
 
-	std::cout << a.size() << " " << a.capacity() << std::endl;
+	for (size_t i = 0; i < 4; i++)
+		vec[i] = i; // 0 1 2 3
 
-	 a.clear();
+	it = vec.begin();
 
-	std::cout << a.size() << " " << a.capacity() << std::endl;
-
-	a.clear();
-
-	std::cout << a.size() << " " << a.capacity() << std::endl;
-
+	*it = 40;
+	std::cout << *it << std::endl;
+	
 	//	std::cout << "TEST#1: std::reserve() VS ft::reserve()" << std::endl;
 	//	{
 	//		std::vector<Foo>	a(2, Foo(10));
@@ -55,4 +42,36 @@ int	main(void)
  * _obj(Bar())   === _obj()
  * _obj(Bar(10)) === _obj(10)
  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+
+struct Foo
+{
+	Foo(void)						{ std::cout << "Ctor" << std::endl; }
+	Foo(Foo const &) 				{ std::cout << "Copy Ctor" << std::endl; }
+	void	operator=(Foo const &) 	{ std::cout << "Copy assignment" << std::endl; }
+	~Foo(void)						{ std::cout << "Dtor" << std::endl; }
+
+	Foo(int) 						{ std::cout << "Int Ctor" << std::endl; }
+};
 
