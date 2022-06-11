@@ -1,34 +1,13 @@
 
 // #include "vector.hpp"
 #include "../iterator/iterator_traits.hpp"
+#include "vector_iterator.hpp"
 #include <iostream>
 #include <vector>
 #include <iterator>
 
-
-
-if (_
-else
-if
-
-
-
-
-
-class Foo
-{
-private:
-	int		_a;
-public:
-	Foo(int a) 
-
-}
-
 int	main(void)
 {
-	int*	ptr = NULL;
-
-	*ptr = 10;
 	
 	//	std::cout << "TEST#1: std::reserve() VS ft::reserve()" << std::endl;
 	//	{
@@ -73,17 +52,17 @@ int	main(void)
 
 
 
-#define RESET   "\033[0m"
-#define RED     "\033[31m"
-#define GREEN   "\033[32m"
-
-struct Foo
-{
-	Foo(void)						{ std::cout << "Ctor" << std::endl; }
-	Foo(Foo const &) 				{ std::cout << "Copy Ctor" << std::endl; }
-	void	operator=(Foo const &) 	{ std::cout << "Copy assignment" << std::endl; }
-	~Foo(void)						{ std::cout << "Dtor" << std::endl; }
-
-	Foo(int) 						{ std::cout << "Int Ctor" << std::endl; }
-};
+// #define RESET   "\033[0m"
+// #define RED     "\033[31m"
+// #define GREEN   "\033[32m"
+// 
+// struct Foo
+// {
+// 	Foo(void)						{ std::cout << "Ctor" << std::endl; }
+// 	Foo(Foo const &) 				{ std::cout << "Copy Ctor" << std::endl; }
+// 	void	operator=(Foo const &) 	{ std::cout << "Copy assignment" << std::endl; }
+// 	~Foo(void)						{ std::cout << "Dtor" << std::endl; }
+// 
+// 	Foo(int) 						{ std::cout << "Int Ctor" << std::endl; }
+// };
 

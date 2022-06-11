@@ -8,10 +8,11 @@ namespace ft
 {
 
 template<class Vector>
-class vector_iterator : public std::iterator<std::random_access_iterator_tag, Vector::value_type>
+class vector_iterator :
+	public std::iterator<std::random_access_iterator_tag, typename Vector::value_type>
 {
 private:
-	pointer		_ptr;
+	typename vector_iterator::pointer	_ptr;
 
 public:
 	vector_iterator(void);
@@ -19,11 +20,17 @@ public:
 	vector_iterator&	operator=(vector_iterator const & rhs);
 	~vector_iterator(void);
 
-	vector_iterator(pointer ptr);
-}
+	vector_iterator(typename vector_iterator::pointer ptr);
+
+	// ++a; pre_increment
+	// a++; post_increment
+	typename vector_iterator::pointer	operator++(void);
+	typename vector_iterator::pointer	operator++(int);
+};
 
 }
 
 # include "vector_iterator.tpp"
 
 #endif
+
