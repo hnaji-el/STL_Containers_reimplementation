@@ -1,14 +1,54 @@
 
-// #include "vector.hpp"
+#include "vector.hpp"
 #include "../iterator/iterator_traits.hpp"
-#include "vector_iterator.hpp"
+// #include "vector_iterator.hpp"
 #include <iostream>
 #include <vector>
 #include <iterator>
+#include <new>
+
+template<class T>
+struct Sample
+{
+	typedef T			value_type;
+	typedef T*			pointer;
+	typedef T const *	const_pointer;
+	typedef T&			reference;
+	typedef T const &	const_reference;
+};
+
+class Bar
+{
+private:
+
+public:
+	Bar(void)						{ std::cout << "Ctor" << std::endl; }
+	Bar(Bar const &)				{ std::cout << "Copy ctor" << std::endl; }
+	void	operator=(Bar const &)	{ std::cout << "Copy assignment" << std::endl; }
+	~Bar(void)						{ std::cout << "Dtor" << std::endl; }
+};
 
 int	main(void)
 {
-	
+	std::vector<int>	vec(2);
+	std::vector<int>::iterator	it = vec.begin();
+
+	*it = 10;
+	std::cout << *it << std::endl;
+
+//	std::vector<int>			vec(4);
+//	std::vector<int>::iterator	it = vec.begin();
+//
+//	*it = 10;
+//	std::cout << *it << std::endl;
+//
+//	it = vec.begin();
+
+//	for (it = vec.begin(); it != vec.end(); it++)
+//	{
+//		*it = 10;
+//		std::cout << *it << std::endl;
+//	}
 	//	std::cout << "TEST#1: std::reserve() VS ft::reserve()" << std::endl;
 	//	{
 	//		std::vector<Foo>	a(2, Foo(10));

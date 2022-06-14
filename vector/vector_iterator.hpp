@@ -22,10 +22,18 @@ public:
 
 	vector_iterator(typename vector_iterator::pointer ptr);
 
-	// ++a; pre_increment
-	// a++; post_increment
 	typename vector_iterator::pointer	operator++(void);
 	typename vector_iterator::pointer	operator++(int);
+
+	bool	operator==(vector_iterator const & rhs) const;
+	bool	operator!=(vector_iterator const & rhs) const;
+
+	// *a         rvalue OK
+	// a->m		  rvalue ...
+	// *a = t	  lvalue OK
+	// *a++ = t   lvalue OK
+	typename vector_iterator::reference	operator*(void);
+	typename vector_iterator::reference	operator->(void);
 };
 
 }

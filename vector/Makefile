@@ -3,11 +3,11 @@ NAME = vector
  
 SRCS = main.cpp
  
-HEADERS = vector.hpp vector.tpp
+HEADERS = vector.hpp vector.tpp vector_iterator.hpp vector_iterator.tpp
  
 COMPILER = c++ -std=c++98
 
-FLAGS = -Wall -Wextra -Werror # -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror
 
  
 all: $(NAME)

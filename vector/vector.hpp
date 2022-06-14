@@ -32,7 +32,8 @@ public:
 	typedef typename allocator_type::const_pointer		const_pointer;
 	typedef ptrdiff_t									difference_type;
 	typedef size_t										size_type;
-	typedef vector_iterator<vector<T, Alloc>>			iterator; // NOTE: ...
+	typedef vector_iterator<vector<T, Alloc> >			iterator; // NOTE: ...
+	typedef vector_iterator<const vector<T, Alloc> >	const_iterator; // NOTE: ...
 
 public:
 	// 	Constructors

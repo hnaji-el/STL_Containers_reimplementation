@@ -28,6 +28,7 @@ template<class Vector>
 vector_iterator<Vector>&	vector_iterator<Vector>::operator=(vector_iterator const & rhs)
 {
 	this->_ptr = rhs._ptr;
+	return (*this);
 }
 
 template<class Vector>
@@ -48,10 +49,36 @@ typename vector_iterator<Vector>::pointer	vector_iterator<Vector>::operator++(vo
 template<class Vector>
 typename vector_iterator<Vector>::pointer	vector_iterator<Vector>::operator++(int)
 {
-	typename vector_iterator::pointer	copyPtr = this->_ptr;
+	typename vector_iterator::pointer	copyPtr;
 
-	this->_ptr++;
+	copyPtr = ++this->_ptr;
 	return (copyPtr);
+}
+
+/*----------------------------------------------------------------------------*/
+/*------------------- equality/inequality comparisons ------------------------*/
+/*----------------------------------------------------------------------------*/
+
+template<class Vector>
+bool	vector_iterator<Vector>::operator==(vector_iterator const & rhs) const
+{
+	return (this->_ptr == rhs._ptr);
+}
+
+template<class Vector>
+bool	vector_iterator<Vector>::operator!=(vector_iterator const & rhs) const
+{
+	return (this->_ptr != rhs._ptr);
+}
+
+/*----------------------------------------------------------------------------*/
+/*-------------------      dereferencing operators    ------------------------*/
+/*----------------------------------------------------------------------------*/
+
+template<class Vector>
+typename vector_iterator<Vector>::reference	vector_iterator<Vector>::operator*(void)
+{
+	return (*this->_ptr);
 }
 
 }
