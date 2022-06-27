@@ -12,30 +12,30 @@ class Bar
 private:
 	int		_a;
 public:
-	//	Orthodox canonical form
 	Bar(void) : _a(0)				{ std::cout << "Default ctor [Bar]" << std::endl; }
 	Bar(Bar const &)				{ std::cout << "Copy ctor [Bar]" << std::endl; }
 	void	operator=(Bar const &)	{ std::cout << "Copy assignment [Bar]" << std::endl; }
 	~Bar(void)						{ std::cout << "Dtor [Bar]" << std::endl; }
-	//	Int constructor
-	Bar(int a)	: _a(a)				{ std::cout << "Int ctor [Bar]" << std::endl; }
-	//	Addition operator
+	explicit Bar(int a)	: _a(a)				{ std::cout << "Int ctor [Bar]" << std::endl; }
 	Bar	operator+(ptrdiff_t n) const
 	{
 		return (Bar(this->_a + n));
 	}
 };
 
+//Bar	test(void)
+//{
+//	return (10);
+//}
+
+/*
+ * Conversion: [
+ */
+
 int	main(void)
 {
-	ft::vector<int>					vec(4);
-	ft::vector<int>::reverse_iterator	rev_it(vec.end());
-
-	for (size_t i = 0; i < vec.size(); i++) { vec[i] = i + 1; }
-
-	std::cout << *(rev_it + 0) << std::endl;
-	std::cout << *rev_it << std::endl;
-
+	Bar	temp = 10; // temp(Bar) = 10(int)
+	//	test();
 	return (0);
 }
 
