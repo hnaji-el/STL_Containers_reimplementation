@@ -2,7 +2,8 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-# include "vector_iterator.hpp" // NOTE: ...
+# include "vector_iterator.hpp"
+# include "../utilities/reverse_iterator.hpp"
 # include <iostream>
 # include <memory>
 # include <cstddef>
@@ -13,7 +14,7 @@
 namespace ft
 {
 
-template< class T, class Alloc = std::allocator<T> >
+template<class T, class Alloc = std::allocator<T> >
 class vector
 {
 private:
@@ -23,7 +24,7 @@ private:
 	size_t	_capacity;
 
 public:
-	// 	member types
+	// 	Member types
 	typedef T											value_type;
 	typedef Alloc										allocator_type;
 	typedef typename allocator_type::reference			reference;
@@ -32,8 +33,10 @@ public:
 	typedef typename allocator_type::const_pointer		const_pointer;
 	typedef ptrdiff_t									difference_type;
 	typedef size_t										size_type;
-	typedef vector_iterator<vector<T, Alloc> >			iterator; // NOTE: ...
-	typedef vector_iterator<const vector<T, Alloc> >	const_iterator; // NOTE: ...
+	typedef vector_iterator<T>							iterator;
+	typedef vector_iterator<T const>					const_iterator;
+	typedef ft::reverse_iterator<iterator>				reverse_iterator;
+	typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 public:
 	// 	Constructors
@@ -44,9 +47,11 @@ public:
 					); /* Throw exception [std::bad_alloc] */
 	~vector(void);
 
-	// Iterators: ...
-	iterator	begin(void); // NOTE: ...
-	iterator	end(void); // NOTE: ...
+	//	Iterators: ...
+	iterator 		begin(void);
+	const_iterator	begin(void) const;
+	iterator		end(void);
+	const_iterator	end(void) const;
 
 	//	Capacity:
 	size_type	size(void) const;
@@ -76,4 +81,3 @@ public:
 # include "vector.tpp"
 
 #endif
-

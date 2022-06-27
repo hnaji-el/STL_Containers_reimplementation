@@ -3,37 +3,59 @@
 # define VECTOR_ITERATOR_HPP
 
 # include <iterator>
+# include <cstddef>
 
 namespace ft
 {
 
-template<class Vector>
-class vector_iterator :
-	public std::iterator<std::random_access_iterator_tag, typename Vector::value_type>
+template<class T>
+class vector_iterator
 {
 private:
-	typename vector_iterator::pointer	_ptr;
+	T*	_ptr;
 
 public:
-	vector_iterator(void);
+	//	Member types
+	typedef T								value_type;
+	typedef T*								pointer;
+	typedef T&								reference;
+	typedef ptrdiff_t						difference_type;
+	typedef std::random_access_iterator_tag	iterator_category;
+
+public:
+	//	Constructors && Destructor
+	vector_iterator(pointer ptr = NULL);
 	vector_iterator(vector_iterator const & src);
 	vector_iterator&	operator=(vector_iterator const & rhs);
 	~vector_iterator(void);
 
-	vector_iterator(typename vector_iterator::pointer ptr);
+	//	Increment && Decrement operators
+	vector_iterator&	operator++(void);
+	vector_iterator		operator++(int);
+	vector_iterator&	operator--(void);
+	vector_iterator		operator--(int);
 
-	typename vector_iterator::pointer	operator++(void);
-	typename vector_iterator::pointer	operator++(int);
-
+	//	Comparison operators
 	bool	operator==(vector_iterator const & rhs) const;
 	bool	operator!=(vector_iterator const & rhs) const;
+	bool	operator<(vector_iterator const & rhs) const;
+	bool	operator>(vector_iterator const & rhs) const;
+	bool	operator<=(vector_iterator const & rhs) const;
+	bool	operator>=(vector_iterator const & rhs) const;
 
-	// *a         rvalue OK
-	// a->m		  rvalue ...
-	// *a = t	  lvalue OK
-	// *a++ = t   lvalue OK
-	typename vector_iterator::reference	operator*(void);
-	typename vector_iterator::reference	operator->(void);
+	//	Dereferencing operators
+	reference	operator*(void) const;
+	reference	operator[](difference_type n) const;
+	pointer		operator->(void) const;
+
+	//	Arithmetic operators
+	vector_iterator	operator+(difference_type n) const;
+	vector_iterator	operator-(difference_type n) const;
+	difference_type	operator-(vector_iterator const & rhs) const;
+
+	//	Compound assignment operators
+	vector_iterator&	operator+=(difference_type n);
+	vector_iterator&	operator-=(difference_type n);
 };
 
 }
@@ -41,4 +63,3 @@ public:
 # include "vector_iterator.tpp"
 
 #endif
-
