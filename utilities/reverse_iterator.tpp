@@ -117,7 +117,7 @@ reverse_iterator<Iterator>	reverse_iterator<Iterator>::operator+(difference_type
 template<class Iterator>
 reverse_iterator<Iterator>	reverse_iterator<Iterator>::operator-(difference_type n) const
 {
-	return (this->base_iterator + n);
+	return (reverse_iterator(this->base_iterator + n));
 }
 
 template<class Iterator>

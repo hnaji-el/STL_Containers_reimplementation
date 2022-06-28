@@ -1,7 +1,5 @@
 
 #include "vector.hpp"
-#include "vector_iterator.hpp"
-#include "../utilities/iterator_traits.hpp"
 #include <iostream>
 #include <vector>
 #include <iterator>
@@ -16,28 +14,70 @@ public:
 	Bar(Bar const &)				{ std::cout << "Copy ctor [Bar]" << std::endl; }
 	void	operator=(Bar const &)	{ std::cout << "Copy assignment [Bar]" << std::endl; }
 	~Bar(void)						{ std::cout << "Dtor [Bar]" << std::endl; }
-	explicit Bar(int a)	: _a(a)				{ std::cout << "Int ctor [Bar]" << std::endl; }
+	Bar(int a)	: _a(a)				{ std::cout << "Int ctor [Bar]" << std::endl; }
 	Bar	operator+(ptrdiff_t n) const
 	{
 		return (Bar(this->_a + n));
 	}
 };
 
-//Bar	test(void)
-//{
-//	return (10);
-//}
-
-/*
- * Conversion: [
- */
-
 int	main(void)
 {
-	Bar	temp = 10; // temp(Bar) = 10(int)
-	//	test();
+	ft::vector<char>				vec(4);
+
+	std::cout << PTRDIFF_MAX << std::endl;
+	std::cout << vec.max_size() << std::endl;
+
 	return (0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
  * SYNTAX: 
