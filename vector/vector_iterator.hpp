@@ -63,6 +63,10 @@ public:
 	//	Compound assignment operators
 	vector_iterator&	operator+=(difference_type n);
 	vector_iterator&	operator-=(difference_type n);
+
+	// vector class template is friend of vector_iterator
+	template<class U, class Alloc>
+	friend class vector;
 };
 
 }
