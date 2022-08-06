@@ -6,8 +6,13 @@ namespace ft
 {
 
 /*----------------------------------------------------------------------------*/
-/*---------------------- Constructors && Destructor --------------------------*/
+/*-                      Constructors && Destructor                          -*/
 /*----------------------------------------------------------------------------*/
+
+template<class T>
+vector_iterator<T>::vector_iterator(void) : _ptr(NULL)
+{
+}
 
 template<class T>
 vector_iterator<T>::vector_iterator(pointer ptr) : _ptr(ptr)
@@ -30,10 +35,19 @@ template<class T>
 vector_iterator<T>::~vector_iterator(void)
 {
 }
+/*----------------------------------------------------------------------------*/
+/*-             one way conversion: iterator -> const_iterator               -*/
+/*----------------------------------------------------------------------------*/
+
+template<class T>
+vector_iterator<T>::operator vector_iterator<T const>() const
+{
+	return (vector_iterator<T const>(this->_ptr));
+}
 
 /*----------------------------------------------------------------------------*/
-/*------------------- pre_increment and post_increment -----------------------*/
-/*------------------- pre_decrement and post_decrement -----------------------*/
+/*-                   pre_increment and post_increment                       -*/
+/*-                   pre_decrement and post_decrement                       -*/
 /*----------------------------------------------------------------------------*/
 
 template<class T>

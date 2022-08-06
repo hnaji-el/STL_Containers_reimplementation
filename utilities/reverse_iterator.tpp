@@ -24,7 +24,7 @@ reverse_iterator<Iterator>::reverse_iterator(iterator_type it)
 template<class Iterator>
 template<class Iter>
 reverse_iterator<Iterator>::reverse_iterator(reverse_iterator<Iter> const & rev_it)
-	: base_iterator(rev_it.base_iterator)
+	: base_iterator(rev_it.base())
 {
 }
 

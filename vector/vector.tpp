@@ -47,15 +47,15 @@ typename vector<T, Alloc>::iterator		vector<T, Alloc>::begin(void)
 }
 
 template<class T, class Alloc>
-typename vector<T, Alloc>::iterator		vector<T, Alloc>::end(void)
-{
-	return (iterator(this->_array + this->_size));
-}
-
-template<class T, class Alloc>
 typename vector<T, Alloc>::const_iterator	vector<T, Alloc>::begin(void) const
 {
 	return (const_iterator(this->_array));
+}
+
+template<class T, class Alloc>
+typename vector<T, Alloc>::iterator		vector<T, Alloc>::end(void)
+{
+	return (iterator(this->_array + this->_size));
 }
 
 template<class T, class Alloc>
@@ -230,34 +230,3 @@ void	vector<T, Alloc>::clear(void)
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -27,7 +27,7 @@ public:
 	reverse_iterator(void);	
 	explicit reverse_iterator(iterator_type it);
 	template<class Iter>
-		reverse_iterator(reverse_iterator<Iter> const & rev_it); // NOTE: ...
+		reverse_iterator(reverse_iterator<Iter> const & rev_it);
 
 	//	base() Member function
 	iterator_type	base(void) const;

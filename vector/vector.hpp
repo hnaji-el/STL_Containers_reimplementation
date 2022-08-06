@@ -18,6 +18,7 @@ template<class T, class Alloc = std::allocator<T> >
 class vector
 {
 private:
+	//	Data members
 	T*		_array;
 	Alloc	_alloc;
 	size_t	_size;
@@ -73,7 +74,6 @@ public:
 
 	//	Modifiers:
 	void	clear(void);
-
 };
 
 }
