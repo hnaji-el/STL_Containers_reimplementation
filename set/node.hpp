@@ -18,7 +18,14 @@ public:
 	bool	color;
 
 public:
+	// Constructors && Destructor
+	node(void);
+	node(node const & src);
+	node&	operator=(node const & rhs);
+	~node(void);
+
 	node(T const & key);
+	node(T const & key, node* lptr, node* rptr);
 };
 
 }
