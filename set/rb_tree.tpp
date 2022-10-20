@@ -9,14 +9,14 @@ namespace ft
  * constructors && destructor
  */
 
-template<class T, class Comp, class NodeAlloc>
-rb_tree<T, Comp, NodeAlloc>::rb_tree(Comp const & comp)
-	: _root(), _size(), _comp(comp), _alloc(), _past_the_last(), _inserted_state()
+template<class T, class Comp, class Alloc>
+rb_tree<T, Comp, Alloc>::rb_tree(Comp const & comp, Alloc const & alloc)
+	: _root(), _size(), _comp(comp), _alloc(alloc), _past_the_last(), _inserted_state(), _node_alloc()
 {
 }
 
-template<class T, class Comp, class NodeAlloc>
-rb_tree<T, Comp, NodeAlloc>::~rb_tree(void)
+template<class T, class Comp, class Alloc>
+rb_tree<T, Comp, Alloc>::~rb_tree(void)
 {
     this->clear_rb();
 }
@@ -25,14 +25,14 @@ rb_tree<T, Comp, NodeAlloc>::~rb_tree(void)
  * search && clear_rb && insert && remove
  */
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::search(T const & key) const
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::search(T const & key) const
 {
 	return (this->search(this->_root, key));
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::search(node<T>* root, T const & key) const
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::search(node<T>* root, T const & key) const
 {
     if (root == NULL)
         return (root);
@@ -43,38 +43,38 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::search(node<T>* root, T const & key) const
     return (root);
 }
 
-template<class T, class Comp, class NodeAlloc>
-void	rb_tree<T, Comp, NodeAlloc>::clear_rb(void)
+template<class T, class Comp, class Alloc>
+void	rb_tree<T, Comp, Alloc>::clear_rb(void)
 {
 	this->clear_rb(this->_root);
 	this->_root = NULL;
 	this->_size = 0;
 }
 
-template<class T, class Comp, class NodeAlloc>
-void	rb_tree<T, Comp, NodeAlloc>::clear_rb(node<T>* root)
+template<class T, class Comp, class Alloc>
+void	rb_tree<T, Comp, Alloc>::clear_rb(node<T>* root)
 {
     if (root == NULL)
         return ;
     clear_rb(root->left);
     clear_rb(root->right);
-    this->_alloc.destroy(root); this->_alloc.deallocate(root, 1);
+    this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
 }
 
-template<class T, class Comp, class NodeAlloc>
-void	rb_tree<T, Comp, NodeAlloc>::insert(T const & key)
+template<class T, class Comp, class Alloc>
+void	rb_tree<T, Comp, Alloc>::insert(T const & key)
 {
 	this->_root = this->insert(this->_root, key);
 	if (this->_root != NULL)
 		this->_root->color = BLACK;
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::insert(node<T>* root, T const & key)
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::insert(node<T>* root, T const & key)
 {
 	if (root == NULL) // insert the node
 	{
-		root = this->_alloc.allocate(1); this->_alloc.construct(root, node<T>(key));
+		root = this->_node_alloc.allocate(1); this->_node_alloc.construct(root, node<T>(key));
 		this->_size++;
 		this->_inserted_state = root;
 		return (root);
@@ -93,16 +93,16 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::insert(node<T>* root, T const & key)
 	return (fix_up(root));
 }
 
-template<class T, class Comp, class NodeAlloc>
-void	rb_tree<T, Comp, NodeAlloc>::remove(T const & key)
+template<class T, class Comp, class Alloc>
+void	rb_tree<T, Comp, Alloc>::remove(T const & key)
 {
 	this->_root = this->remove(this->_root, key);
 	if (this->_root != NULL)
 		this->_root->color = BLACK;
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::remove(node<T>* root, T const & key)
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::remove(node<T>* root, T const & key)
 {
 	if (root == NULL)
 		return (NULL);
@@ -123,7 +123,7 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::remove(node<T>* root, T const & key)
 	{
 		if (root->left == NULL && root->right == NULL) // leaf node
 		{
-			this->_alloc.destroy(root); this->_alloc.deallocate(root, 1);
+			this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
 			this->_size--;
 			return (NULL);
 		}
@@ -134,7 +134,9 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::remove(node<T>* root, T const & key)
 		}
 		else if (root->left != NULL && root->right != NULL) // internal node
 		{
-			root->key = this->inorder_successor(root)->key; // ATT: if root->key is const ...
+			this->_alloc.destroy(&root->key);
+			this->_alloc.construct(&root->key, this->inorder_successor(root)->key);
+
 			if (!is_red(root->right) && !is_red(root->right->left))
 				root = move_red_to_right(root);
 			root->right = this->remove(root->right, root->key);
@@ -149,8 +151,8 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::remove(node<T>* root, T const & key)
  * Helper member functions for remove operation
  */
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::move_red_to_left(node<T>* node)
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::move_red_to_left(node<T>* node)
 {
 	// if left-child of a node is a 2-node: node->left && node->left->left are blacks.
 	color_flip(node);
@@ -163,8 +165,8 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::move_red_to_left(node<T>* node)
 	return (node);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::move_red_to_right(node<T>* node)
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::move_red_to_right(node<T>* node)
 {
 	// if right-child of a node is a 2-node: node->right && node->right->left are blacks.
 	color_flip(node);
@@ -180,8 +182,8 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::move_red_to_right(node<T>* node)
  * 3 ELEMENTARY OPERATIONS: [ right_rotation && left_rotation && color_flip ]
  */
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::fix_up(node<T>* node)
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::fix_up(node<T>* node)
 {
 	if (!is_red(node->left) && is_red(node->right))
 		node = left_rotation(node);
@@ -192,8 +194,8 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::fix_up(node<T>* node)
 	return (node);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::left_rotation(node<T>* node)
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::left_rotation(node<T>* node)
 {
 	ft::node<T>*	rptr = node->right;
 
@@ -207,8 +209,8 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::left_rotation(node<T>* node)
 	return (rptr);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::right_rotation(node<T>* node)
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::right_rotation(node<T>* node)
 {
 	ft::node<T>* lptr = node->left;
 
@@ -222,8 +224,8 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::right_rotation(node<T>* node)
 	return (lptr);
 }
 
-template<class T, class Comp, class NodeAlloc>
-void	rb_tree<T, Comp, NodeAlloc>::color_flip(node<T>* node)
+template<class T, class Comp, class Alloc>
+void	rb_tree<T, Comp, Alloc>::color_flip(node<T>* node)
 {
 	node->color = !node->color;
 	node->left->color = !node->left->color;
@@ -235,22 +237,22 @@ void	rb_tree<T, Comp, NodeAlloc>::color_flip(node<T>* node)
  */
 
 
-template<class T, class Comp, class NodeAlloc>
-bool	rb_tree<T, Comp, NodeAlloc>::is_red(node<T>* node) const
+template<class T, class Comp, class Alloc>
+bool	rb_tree<T, Comp, Alloc>::is_red(node<T>* node) const
 {
 	if (node == NULL)
 		return (false); // NULL links are black
 	return (node->color == RED);
 }
 
-template<class T, class Comp, class NodeAlloc>
-size_t	rb_tree<T, Comp, NodeAlloc>::size(void) const
+template<class T, class Comp, class Alloc>
+size_t	rb_tree<T, Comp, Alloc>::size(void) const
 {
 	return (this->_size);
 }
 
-template<class T, class Comp, class NodeAlloc>
-bool	rb_tree<T, Comp, NodeAlloc>::is_empty(void) const
+template<class T, class Comp, class Alloc>
+bool	rb_tree<T, Comp, Alloc>::is_empty(void) const
 {
 	return (this->_size == 0);
 }
@@ -259,8 +261,8 @@ bool	rb_tree<T, Comp, NodeAlloc>::is_empty(void) const
  * inorder_successor && inorder_predecessor
  */
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::inorder_successor(node<T> const * node) const
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::inorder_successor(node<T> const * node) const
 {
 	ft::node<T>*	ancestor = this->_root;
 	ft::node<T>*	successor = NULL;
@@ -285,8 +287,8 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::inorder_successor(node<T> const * node) co
 	return ((successor == NULL) ? (ft::node<T>*)(&this->_past_the_last) : successor);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::inorder_predecessor(node<T> const * node) const
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::inorder_predecessor(node<T> const * node) const
 {
 	ft::node<T>*	ancestor = this->_root;
 	ft::node<T>*	predecessor = NULL;
@@ -317,8 +319,8 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::inorder_predecessor(node<T> const * node) 
  * leftmost_node && rightmost_node
  */
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::leftmost_node(node<T>* node) const
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::leftmost_node(node<T>* node) const
 {
     if (node == NULL)
         return (NULL);
@@ -328,8 +330,8 @@ node<T>*	rb_tree<T, Comp, NodeAlloc>::leftmost_node(node<T>* node) const
     return (node);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::rightmost_node(node<T>* node) const
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::rightmost_node(node<T>* node) const
 {
    if (node == NULL)
        return (NULL);

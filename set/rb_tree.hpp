@@ -5,24 +5,30 @@
 # include "node.hpp"
 # include <algorithm>
 # include <iostream>
+# include <functional>
+# include <memory>
 
 namespace ft
 {
 
-template<class T, class Compare, class NodeAlloc>
+template<class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
 class rb_tree
 {
 private:
 	node<T>*	_root;
 	size_t		_size;
 	Compare		_comp;
-	NodeAlloc	_alloc;
+	Alloc		_alloc;
 	node<T>		_past_the_last; // valid address for end-iterator
 	node<T>*	_inserted_state;
 
+	typedef typename Alloc::template rebind< node<T> >::other	NodeAlloc;
+	NodeAlloc	_node_alloc;
+
+
 public:
 	// Constructors && Destructor
-	rb_tree(Compare const & comp);
+	rb_tree(Compare const & comp = Compare(), Alloc const & alloc = Alloc());
 	~rb_tree(void);
 	
 	// search, insert and remove operations of red-black tree
@@ -38,7 +44,7 @@ public:
 	// inorder successor && inorder predecessor of a node
 	node<T>*	inorder_successor(node<T> const * node) const;
 	node<T>*	inorder_predecessor(node<T> const * node) const;
-	
+
 private:
 	// overloaded versions of [ search && insert && remove && clear_rb ]
 	node<T>*	search(node<T>* root, T const & key) const;
