@@ -37,9 +37,10 @@ node<T>*	rb_tree<T, Comp, Alloc>::search(node<T>* root, T const & key) const
     if (root == NULL)
         return (root);
     else if (this->_comp(key, root->key) == true) // move to left
-        return (search(root->left, key));
+        return (this->search(root->left, key));
     else if (this->_comp(root->key, key) == true) // move to right
-        return (search(root->right, key));
+        return (this->search(root->right, key));
+
     return (root);
 }
 
@@ -56,6 +57,7 @@ void	rb_tree<T, Comp, Alloc>::clear_rb(node<T>* root)
 {
     if (root == NULL)
         return ;
+
     clear_rb(root->left);
     clear_rb(root->right);
     this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
@@ -238,7 +240,7 @@ void	rb_tree<T, Comp, Alloc>::color_flip(node<T>* node)
 
 
 template<class T, class Comp, class Alloc>
-bool	rb_tree<T, Comp, Alloc>::is_red(node<T>* node) const
+bool	rb_tree<T, Comp, Alloc>::is_red(node<T> const * node) const
 {
 	if (node == NULL)
 		return (false); // NULL links are black

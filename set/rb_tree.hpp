@@ -61,7 +61,7 @@ private:
 	// Helper member functions for remove operation
 	node<T>*	move_red_to_left(node<T>* node);
 	node<T>*	move_red_to_right(node<T>* node);
-	bool		is_red(node<T>* node) const;
+	bool		is_red(node<T> const * node) const;
 
 	// leftmost && rightmost node of a node
 	node<T>*	leftmost_node(node<T>* node) const;
