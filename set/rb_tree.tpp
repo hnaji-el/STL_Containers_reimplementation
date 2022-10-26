@@ -64,6 +64,16 @@ void	rb_tree<T, Comp, Alloc>::clear_rb(node<T>* root)
 }
 
 template<class T, class Comp, class Alloc>
+void	rb_tree<T, Comp, Alloc>::swap(rb_tree& x)
+{
+	std::swap(this->_root, x._root);
+	std::swap(this->_size, x._size);
+	std::swap(this->_comp, x._comp);
+	std::swap(this->_alloc, x._alloc);
+	std::swap(this->_node_alloc, x._node_alloc);
+}
+
+template<class T, class Comp, class Alloc>
 void	rb_tree<T, Comp, Alloc>::insert(T const & key)
 {
 	this->_root = this->insert(this->_root, key);
@@ -235,7 +245,7 @@ void	rb_tree<T, Comp, Alloc>::color_flip(node<T>* node)
 }
 
 /*
- * is_red && size && is_empty
+ * is_red && size && is_empty && max_size
  */
 
 
@@ -257,6 +267,12 @@ template<class T, class Comp, class Alloc>
 bool	rb_tree<T, Comp, Alloc>::is_empty(void) const
 {
 	return (this->_size == 0);
+}
+
+template<class T, class Comp, class Alloc>
+size_t	rb_tree<T, Comp, Alloc>::max_size(void) const
+{
+    return (this->_alloc.max_size());
 }
 
 /*
@@ -341,6 +357,22 @@ node<T>*	rb_tree<T, Comp, Alloc>::rightmost_node(node<T>* node) const
    while (node->right != NULL)
        node = node->right;
    return (node);
+}
+
+/*
+ * getters
+ */
+
+template<class T, class Comp, class Alloc>
+Comp	rb_tree<T, Comp, Alloc>::get_key_compare(void) const
+{
+	return (this->_comp);
+}
+
+template<class T, class Comp, class Alloc>
+Alloc	rb_tree<T, Comp, Alloc>::get_allocator(void) const
+{
+	return (this->_alloc);
 }
 
 }

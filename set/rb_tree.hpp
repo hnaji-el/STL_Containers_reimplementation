@@ -15,15 +15,18 @@ template<class T, class Compare = std::less<T>, class Alloc = std::allocator<T> 
 class rb_tree
 {
 private:
+	// member types
+	typedef typename Alloc::template rebind< node<T> >::other	NodeAlloc;
+
+private:
 	node<T>*	_root;
 	size_t		_size;
 	Compare		_comp;
 	Alloc		_alloc;
+	NodeAlloc	_node_alloc;
+public:
 	node<T>		_past_the_last; // valid address for end-iterator
 	node<T>*	_inserted_state;
-
-	typedef typename Alloc::template rebind< node<T> >::other	NodeAlloc;
-	NodeAlloc	_node_alloc;
 
 
 public:
@@ -33,17 +36,23 @@ public:
 	
 	// search, insert and remove operations of red-black tree
 	node<T>*	search(T const & key) const;
-	void		insert(T const & key);
-	void		remove(T const & key);
-	void		clear_rb(void);
+	void	insert(T const & key);
+	void	remove(T const & key);
+	void	clear_rb(void);
+	void	swap(rb_tree& x);
 
-	// size && is_empty
+	// size && is_empty && max_size
+	size_type	max_size() const;
 	size_t	size(void) const;
 	bool	is_empty(void) const;
 	
 	// inorder successor && inorder predecessor of a node
 	node<T>*	inorder_successor(node<T> const * node) const;
 	node<T>*	inorder_predecessor(node<T> const * node) const;
+
+	// getters
+	Compare	get_key_compare(void) const;
+	Alloc	get_allocator(void) const;
 
 private:
 	// overloaded versions of [ search && insert && remove && clear_rb ]
