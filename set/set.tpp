@@ -146,48 +146,35 @@ void	swap(set<T, Comp, Alloc>& x, set<T, Comp, Alloc>& y)
 }
 
 /*
- * Element access: [ operator[] ]
- */
-
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::mapped_type&    map<Key, T, Comp, Alloc>::operator[](key_type const & k)
-{
-    ft::pair<iterator, bool>    ret;
-
-    ret = this->insert(ft::make_pair(k, mapped_type()));
-    return (ret.first->second);
-}
-
-/*
  * Iterators:
  */
 
 template<class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::iterator map<Key, T, Comp, Alloc>::begin(void)
+typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::begin(void)
 {
-    if (this->_rb_obj.root == NULL)
-        return (iterator(&(this->_avl_obj), &(this->_avl_obj.past_the_last)));
-    return (iterator(&(this->_avl_obj), this->_avl_obj.leftmost_node(this->_avl_obj.root)));
+	if (this->empty())
+		return (iterator(&(this->_rb_obj.past_the_last), &this->_rb_obj));
+	return (iterator(this->_rb_obj.leftmost_node(), &this->_rb_obj));
 }
 
 template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::const_iterator	set<T, Comp, Alloc>::begin(void) const
 {
-	if (this->_avl_obj.root == NULL)
-		return (const_iterator(&(this->_avl_obj), &(this->_avl_obj.past_the_last)));
-	return (const_iterator(&(this->_avl_obj), this->_avl_obj.leftmost_node(this->_avl_obj.root)));
+	if (this->empty())
+		return (const_iterator(&(this->_rb_obj.past_the_last), &this->_rb_obj));
+	return (const_iterator(this->_rb_obj.leftmost_node(), &this->_rb_obj));
 }
 
 template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::end(void)
 {
-	return (iterator(&(this->_avl_obj), &(this->_avl_obj.past_the_last)));
+	return (iterator(&(this->_rb_obj.past_the_last), &this->_rb_obj));
 }
 
 template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::const_iterator	set<T, Comp, Alloc>::end(void) const
 {
-	return (const_iterator(&(this->_avl_obj), &(this->_avl_obj.past_the_last)));
+	return (const_iterator(&(this->_rb_obj.past_the_last), &this->_rb_obj));
 }
 
 template<class T, class Comp, class Alloc>
@@ -239,33 +226,33 @@ typename set<T, Comp, Alloc>::size_type	set<T, Comp, Alloc>::max_size(void) cons
 /*
  * Operations: [ find && count ]
  */
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::iterator        map<Key, T, Comp, Alloc>::find(key_type const & k)
+template<class T, class Comp, class Alloc>
+typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::find(value_type const & val)
 {
-    avl_node<value_type>*   temp;
+	node<value_type>*	temp;
 
-    temp = this->_avl_obj.search(this->_avl_obj.root, k);
-    if (temp == NULL)
-        return (this->end());
-    return (iterator(&(this->_avl_obj), temp));
+	temp = this->_rb_obj.search(this->_rb_obj.root, k);
+	if (temp == NULL)
+		return (this->end());
+	return (iterator(&(this->_rb_obj), temp));
 }
 
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::const_iterator  map<Key, T, Comp, Alloc>::find(key_type const & k) const
+template<class T, class Comp, class Alloc>
+typename set<T, Comp, Alloc>::const_iterator  set<T, Comp, Alloc>::find(value_type const & val) const
 {
-    const avl_node<value_type>* const   temp = this->_avl_obj.search(this->_avl_obj.root, k);
-
-    if (temp == NULL)
-        return (this->end());
-    return (const_iterator(&(this->_avl_obj), temp));
+	const node<value_type>* const   temp = this->_rb_obj.search(this->_rb_obj.root, k);
+	
+	if (temp == NULL)
+		return (this->end());
+	return (const_iterator(&(this->_rb_obj), temp));
 }
 
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::size_type    map<Key, T, Comp, Alloc>::count(key_type const & k) const
+template<class T, class Comp, class Alloc>
+typename set<T, Comp, Alloc>::size_type    set<T, Comp, Alloc>::count(value_type const & val) const
 {
-    if (this->_avl_obj.search(this->_avl_obj.root, k) == NULL)
-        return (0);
-    return (1);
+	if (this->_rb_obj.search(this->_rb_obj.root, k) == NULL)
+		return (0);
+	return (1);
 }
 
 /*
@@ -385,15 +372,15 @@ map<Key, T, Comp, Alloc>::equal_range(key_type const & k) const
  */
 
 template<class T, class Compare, class Alloc>
-Compare	set<T, Comp, Alloc>::key_comp(void) const
+typename set<T, Compate, Alloc>::key_compare	set<T, Comp, Alloc>::key_comp(void) const
 {
 	return (this->_rb_obj.get_key_compare());
 }
 
 template<class T, class Compare, class Alloc>
-Compare	set<T, Comp, Alloc>::value_comp(void) const
+typename set<T, Compare, Alloc>::value_compare	set<T, Comp, Alloc>::value_comp(void) const
 {
-	return (this->_rb_obj.get_key_compare());
+	return (this->key_comp());
 }
 
 template<class T, class Compare, class Alloc>

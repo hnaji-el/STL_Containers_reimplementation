@@ -21,7 +21,12 @@ namespace ft
 
 template<class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
 class set
-{
+{	
+private:
+	// Data members:
+	typedef rb_tree<T, Compare, Alloc>	rb_tree_t;
+	rb_tree_t	_rb_obj;
+
 public:
 	// Member types:
 	typedef T								key_type;
@@ -33,18 +38,16 @@ public:
 	typedef typename Alloc::const_reference	const_reference;
 	typedef typename Alloc::pointer			pointer;
 	typedef typename Alloc::const_pointer	const_pointer;
-private:
-	typedef rb_tree<value_type, key_compare, allocator_type>	rb_tree;
-public:
-	typedef ft::map_iterator<value_type      , node<value_type>      , rb_tree      >	iterator;
-	typedef ft::map_iterator<value_type const, node<value_type> const, rb_tree const>	const_iterator;
-	typedef ft::reverse_iterator<iterator>			reverse_iterator;
-	typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 	typedef typename ft::iterator_traits<iterator>::difference_type	difference_type;
 	typedef size_t	size_type;
-
+	// iterators:
+	typedef ft::map_iterator<value_type      , node<value_type>      , rb_tree_t      >	iterator;
+	typedef ft::map_iterator<value_type const, node<value_type> const, rb_tree_t const>	const_iterator;
+	typedef ft::reverse_iterator<iterator>			reverse_iterator;
+	typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+	
 public:
-	// Constructors:
+	// Constructors
 	explicit set(key_compare const & comp = key_compare(),
 				allocator_type const & alloc = allocator_type());
 	
@@ -74,9 +77,6 @@ public:
 	// Modifiers: [ clear  && swap]
 	void	clear(void);
 	void	swap(set& x);
-
-	// Element access:
-	mapped_type&	operator[](key_type const & k);
 	
 	// Iterators:
 	iterator			begin(void);
@@ -87,31 +87,27 @@ public:
 	const_reverse_iterator	rbegin(void) const;
 	reverse_iterator		rend(void);
 	const_reverse_iterator	rend(void) const;
-
+	
 	// Capacity: [ empty && size && max_size ]
 	size_type	size(void) const;
 	size_type	max_size(void) const;
 	bool		empty(void) const;
-
+	
 	// Operations: [ find && count && lower_bound && upper_bound ]
-	iterator        find(key_type const & k);
-	const_iterator  find(key_type const & k) const;
-	size_type       count(key_type const & k) const;
-	iterator        lower_bound(key_type const & k);
-	const_iterator  lower_bound(key_type const & k) const;
-	iterator        upper_bound(key_type const & k);
-	const_iterator  upper_bound(key_type const & k) const;
-	ft::pair<iterator, iterator>             equal_range(key_type const & k);
-	ft::pair<const_iterator, const_iterator> equal_range(key_type const & k) const;
+	iterator		find(value_type const & val);
+	const_iterator	find(value_type const & val) const;
+	size_type		count(key_type const & val) const;
+	iterator		lower_bound(key_type const & k);
+	const_iterator	lower_bound(key_type const & k) const;
+	iterator		upper_bound(key_type const & k);
+	const_iterator	upper_bound(key_type const & k) const;
+	ft::pair<iterator, iterator>				equal_range(key_type const & k);
+	ft::pair<const_iterator, const_iterator>	equal_range(key_type const & k) const;
 	
 	// Observers:
 	key_compare		key_comp(void) const;
 	value_compare	value_comp(void) const;
 	allocator_type	get_allocator(void) const;
-	
-private:
-	// Data members:
-	rb_tree	_rb_obj;
 };
 
 

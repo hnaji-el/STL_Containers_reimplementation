@@ -338,6 +338,18 @@ node<T>*	rb_tree<T, Comp, Alloc>::inorder_predecessor(node<T> const * node) cons
  */
 
 template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::leftmost_node(void) const
+{
+	return (leftmost_node(this->_root));
+}
+
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::rightmost_node(void) const
+{
+	return (rightmost_node(this->_root));
+}
+
+template<class T, class Comp, class Alloc>
 node<T>*	rb_tree<T, Comp, Alloc>::leftmost_node(node<T>* node) const
 {
     if (node == NULL)

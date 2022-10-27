@@ -28,7 +28,6 @@ public:
 	node<T>		_past_the_last; // valid address for end-iterator
 	node<T>*	_inserted_state;
 
-
 public:
 	// Constructors && Destructor
 	rb_tree(Compare const & comp = Compare(), Alloc const & alloc = Alloc());
@@ -49,6 +48,10 @@ public:
 	// inorder successor && inorder predecessor of a node
 	node<T>*	inorder_successor(node<T> const * node) const;
 	node<T>*	inorder_predecessor(node<T> const * node) const;
+
+	// leftmost and rightmost node of the tree
+	node<T>*	leftmost_node(void) const;
+	node<T>*	rightmost_node(void) const;
 
 	// getters
 	Compare	get_key_compare(void) const;
