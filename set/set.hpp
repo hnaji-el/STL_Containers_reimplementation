@@ -99,10 +99,10 @@ public:
 	size_type		count(value_type const & val) const;
 	iterator		lower_bound(value_type const & val);
 	const_iterator	lower_bound(value_type const & val) const;
-	iterator		upper_bound(key_type const & k);
-	const_iterator	upper_bound(key_type const & k) const;
-	ft::pair<iterator, iterator>				equal_range(key_type const & k);
-	ft::pair<const_iterator, const_iterator>	equal_range(key_type const & k) const;
+	iterator		upper_bound(value_type const & val);
+	const_iterator	upper_bound(value_type const & val) const;
+	ft::pair<iterator, iterator>				equal_range(value_type const & val);
+	ft::pair<const_iterator, const_iterator>	equal_range(value_type const & val) const;
 	
 	// Observers:
 	key_compare		key_comp(void) const;
@@ -116,23 +116,23 @@ template<class T, class Compare, class Alloc>
 void	swap(set<T,Compare,Alloc>& x, set<T,Compare,Alloc>& y);
 
 // relational comparison
-template< class Key, class T, class Compare, class Alloc >
-bool operator==( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs );
+template<class T, class Compare, class Alloc>
+bool	operator==(set<T, Compare, Alloc> const & lhs, set<T, Compare, Alloc> const & rhs);
 
-template< class Key, class T, class Compare, class Alloc >
-bool operator!=( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs );
+template<class T, class Compare, class Alloc>
+bool	operator!=(set<T, Compare, Alloc> const & lhs, set<T, Compare, Alloc> const & rhs);
 
-template< class Key, class T, class Compare, class Alloc >
-bool operator<( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs );
+template<class T, class Compare, class Alloc>
+bool	operator<(set<T, Compare, Alloc> const & lhs, set<T, Compare, Alloc> const & rhs);
 
-template< class Key, class T, class Compare, class Alloc >
-bool operator<=( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs );
+template<class T, class Compare, class Alloc>
+bool	operator<=(set<T, Compare, Alloc> const & lhs, set<T, Compare, Alloc> const & rhs);
 
-template< class Key, class T, class Compare, class Alloc >
-bool operator>( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs );
+template<class T, class Compare, class Alloc>
+bool	operator>(set<T, Compare, Alloc> const & lhs, set<T, Compare, Alloc> const & rhs);
 
-template< class Key, class T, class Compare, class Alloc >
-bool operator>=( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs );
+template<class T, class Compare, class Alloc>
+bool	operator>=(set<T, Compare, Alloc> const & lhs, set<T, Compare, Alloc> const & rhs);
 
 }
 

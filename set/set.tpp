@@ -9,35 +9,35 @@ namespace ft
 {
 
 /*
- * Constructors:
+ * Constructors
  */
 
-template<class T, class Compare, class Alloc>
-set<T, Compare, Alloc>::set(key_compare const & comp, allocator_type const & alloc)
-	: _rb_obj(comp)
+template<class T, class Comp, class Alloc>
+set<T, Comp, Alloc>::set(key_compare const & comp, allocator_type const & alloc)
+	: _rb_obj(comp, alloc)
 {
 }
 
-template<class T, class Compare, class Alloc>
+template<class T, class Comp, class Alloc>
 template <class InputIterator>
-set<T, Compare, Alloc>::set(InputIterator first,
-                              InputIterator last,
-                              key_compare const & comp,
-                              allocator_type const & alloc)
-	: _rb_obj(comp)
+set<T, Comp, Alloc>::set(InputIterator first,
+						InputIterator last,
+						key_compare const & comp,
+						allocator_type const & alloc)
+	: _rb_obj(comp, alloc)
 {
-    this->insert(first, last);
+	this->insert(first, last);
 }
 
-template<class T, class Compare, class Alloc>
-set<T, Compare, Alloc>::set(set const & x)
-	: _rb_obj(x.key_comp())
+template<class T, class Comp, class Alloc>
+set<T, Comp, Alloc>::set(set const & x)
+	: _rb_obj(x._rb_obj)
 {
     this->insert(x.begin(), x.end());
 }
 
-template<class T, class Compare, class Alloc>
-set<T, Compare, Alloc>::~set(void)
+template<class T, class Comp, class Alloc>
+set<T, Comp, Alloc>::~set(void)
 {
 }
 
@@ -45,12 +45,11 @@ set<T, Compare, Alloc>::~set(void)
  * copy assignment operator
  */
 
-template<class Key, class T, class Comp, class Alloc>
-map<Key, T, Comp, Alloc>&   map<Key, T, Comp, Alloc>::operator=(map const & rhs)
+template<class T, class Comp, class Alloc>
+set<T, Comp, Alloc>&	set<T, Comp, Alloc>::operator=(set const & rhs)
 {
-    this->clear();
+	this->_rb_obj = rhs._rb_obj;
     this->insert(rhs.begin(), rhs.end());
-    this->_comp = this->_avl_obj.comp = rhs.key_comp();
     return (*this);
 }
 
@@ -340,43 +339,42 @@ Alloc	set<T, Comp, Alloc>::get_allocator(void) const
  * Relational operators:
  */
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator==(const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class T, class Comp, class Alloc>
+bool	operator==(set<T, Comp, Alloc> const & lhs, set<T, Comp, Alloc> const & rhs)
 {
-    return ((lhs.size() == rhs.size()) && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+	return ((lhs.size() == rhs.size()) && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 }
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator!=(const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class T, class Comp, class Alloc>
+bool	operator!=(set<T, Comp, Alloc> const & lhs, set<T, Comp, Alloc> const & rhs)
 {
-    return !(lhs == rhs);
+	return (!(lhs == rhs));
 }
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator< (const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class T, class Comp, class Alloc>
+bool	operator<(set<T, Comp, Alloc> const & lhs, set<T, Comp, Alloc> const & rhs)
 {
-    return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 }
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator<= (const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class T, class Comp, class Alloc>
+bool	operator<=(set<T, Comp, Alloc> const & lhs, set<T, Comp, Alloc> const & rhs)
 {
-    return (!(rhs < lhs));
+	return (!(rhs < lhs));
 }
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator> (const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class T, class Comp, class Alloc>
+bool	operator>(set<T, Comp, Alloc> const & lhs, set<T, Comp, Alloc> const & rhs)
 {
-    return (rhs < lhs);
+	return (rhs < lhs);
 }
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator>= (const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class T, class Comp, class Alloc>
+bool	operator>=(set<T, Comp, Alloc> const & lhs, set<T, Comp, Alloc> const & rhs)
 {
-    return (!(lhs < rhs));
+	return (!(lhs < rhs));
 }
 
 }
 
 #endif
-

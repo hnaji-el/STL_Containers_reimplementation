@@ -29,8 +29,10 @@ public:
 	node<T>*	_inserted_state;
 
 public:
-	// Constructors && Destructor
+	// Constructors && Copy assignment && Destructor
 	rb_tree(Compare const & comp = Compare(), Alloc const & alloc = Alloc());
+	rb_tree(rb_tree const & src);
+	rb_tree&	operator=(rb_tree const & rhs);
 	~rb_tree(void);
 	
 	// search, insert and remove operations of red-black tree

@@ -16,6 +16,20 @@ rb_tree<T, Comp, Alloc>::rb_tree(Comp const & comp, Alloc const & alloc)
 }
 
 template<class T, class Comp, class Alloc>
+rb_tree<T, Comp, Alloc>::rb_tree(rb_tree const & src)
+	: _root(), _size(), _comp(src._comp), _alloc(src._alloc), _past_the_last(), _inserted_state(), _node_alloc()
+{
+}
+
+template<class T, class Comp, class Alloc>
+rb_tree<T, Comp, Alloc>&	rb_tree<T, Comp, Alloc>::operator=(rb_tree const & rhs)
+{
+	this->clear_rb();
+	this->_comp = rhs->_comp;
+	this->_alloc = rhs->_alloc;
+}
+
+template<class T, class Comp, class Alloc>
 rb_tree<T, Comp, Alloc>::~rb_tree(void)
 {
     this->clear_rb();
