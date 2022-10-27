@@ -226,31 +226,31 @@ typename set<T, Comp, Alloc>::size_type	set<T, Comp, Alloc>::max_size(void) cons
 /*
  * Operations: [ find && count ]
  */
+
 template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::find(value_type const & val)
 {
-	node<value_type>*	temp;
+	node<value_type>* const		temp = this->_rb_obj.search(val);
 
-	temp = this->_rb_obj.search(this->_rb_obj.root, k);
 	if (temp == NULL)
 		return (this->end());
-	return (iterator(&(this->_rb_obj), temp));
+	return (iterator(temp, &this->_rb_obj));
 }
 
 template<class T, class Comp, class Alloc>
-typename set<T, Comp, Alloc>::const_iterator  set<T, Comp, Alloc>::find(value_type const & val) const
+typename set<T, Comp, Alloc>::const_iterator	set<T, Comp, Alloc>::find(value_type const & val) const
 {
-	const node<value_type>* const   temp = this->_rb_obj.search(this->_rb_obj.root, k);
+	const node<value_type>* const	temp = this->_rb_obj.search(val);
 	
 	if (temp == NULL)
 		return (this->end());
-	return (const_iterator(&(this->_rb_obj), temp));
+	return (const_iterator(temp, &this->_rb_obj));
 }
 
 template<class T, class Comp, class Alloc>
-typename set<T, Comp, Alloc>::size_type    set<T, Comp, Alloc>::count(value_type const & val) const
+typename set<T, Comp, Alloc>::size_type	set<T, Comp, Alloc>::count(value_type const & val) const
 {
-	if (this->_rb_obj.search(this->_rb_obj.root, k) == NULL)
+	if (this->_rb_obj.search(val) == NULL)
 		return (0);
 	return (1);
 }
@@ -259,112 +259,59 @@ typename set<T, Comp, Alloc>::size_type    set<T, Comp, Alloc>::count(value_type
  * Operations: [ lower_bound && upper_bound && equal_range ]
  */
 
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::iterator map<Key, T, Comp, Alloc>::lower_bound(key_type const & k)
+template<class T, class Comp, class Alloc>
+typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::lower_bound(value_type const & val)
 {
-    avl_node<value_type> const *    temp = this->_avl_obj.root;
-    avl_node<value_type> const *    lower_bound = NULL;
+	node<value_type>* const		lower_bound = this->_rb.obj.lower_bound(val);
 
-    while (temp != NULL)
-    {
-        if (!this->_comp(temp->data.first, k) && !this->_comp(k, temp->data.first))
-        {
-            lower_bound = temp;
-            break ;
-        }
-        if (this->_comp(k, temp->data.first) == true)
-        {
-            lower_bound = temp;
-            temp = temp->left;
-        }
-        else
-            temp = temp->right;
-    }
-    if (lower_bound == NULL)
-        return (this->end());
-    return (iterator(&(this->_avl_obj), (avl_node<value_type>*)lower_bound));
+	if (lower_bound == NULL)
+		return (this->end());
+	return (iterator(lower_bound, &this->_rb_obj));
 }
 
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::const_iterator   map<Key, T, Comp, Alloc>::lower_bound(key_type const & k) const
+template<class T, class Comp, class Alloc>
+typename set<T, Comp, Alloc>::const_iterator	set<T, Comp, Alloc>::lower_bound(value_type const & val) const
 {
-    avl_node<value_type> const *    temp = this->_avl_obj.root;
-    avl_node<value_type> const *    lower_bound = NULL;
+	const node<value_type>* const	lower_bound = this->_rb.obj.lower_bound(val);
 
-    while (temp != NULL)
-    {
-        if (!this->_comp(temp->data.first, k) && !this->_comp(k, temp->data.first))
-        {
-            lower_bound = temp;
-            break ;
-        }
-        if (this->_comp(k, temp->data.first) == true)
-        {
-            lower_bound = temp;
-            temp = temp->left;
-        }
-        else
-            temp = temp->right;
-    }
-    if (lower_bound == NULL)
-        return (this->end());
-    return (const_iterator(&(this->_avl_obj), lower_bound));
+	if (lower_bound == NULL)
+		return (this->end());
+	return (const_iterator(lower_bound, &this->_rb_obj));
 }
 
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::iterator map<Key, T, Comp, Alloc>::upper_bound(key_type const & k)
-{
-    avl_node<value_type> const *    temp = this->_avl_obj.root;
-    avl_node<value_type> const *    upper_bound = NULL;
 
-    while (temp != NULL)
-    {
-        if (this->_comp(k, temp->data.first) == true)
-        {
-            upper_bound = temp;
-            temp = temp->left;
-        }
-        else
-            temp = temp->right;
-    }
-    if (upper_bound == NULL)
-        return (this->end());
-    return (iterator(&(this->_avl_obj), (avl_node<value_type>*)upper_bound));
+template<class T, class Comp, class Alloc>
+typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::upper_bound(value_type const & val)
+{
+	node<value_type>* const		upper_bound = this->_rb.obj.upper_bound(val);
+
+	if (upper_bound == NULL)
+		return (this->end());
+	return (iterator(upper_bound, &this->_rb_obj));
 }
 
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::const_iterator   map<Key, T, Comp, Alloc>::upper_bound(key_type const & k) const
+template<class T, class Comp, class Alloc>
+typename set<T, Comp, Alloc>::const_iterator	set<T, Comp, Alloc>::upper_bound(value_type const & val) const
 {
-    avl_node<value_type> const *    temp = this->_avl_obj.root;
-    avl_node<value_type> const *    upper_bound = NULL;
+	const node<value_type>* const	upper_bound = this->_rb.obj.upper_bound(val);
 
-    while (temp != NULL)
-    {
-        if (this->_comp(k, temp->data.first) == true)
-        {
-            upper_bound = temp;
-            temp = temp->left;
-        }
-        else
-            temp = temp->right;
-    }
-    if (upper_bound == NULL)
-        return (this->end());
-    return (const_iterator(&(this->_avl_obj), upper_bound));
+	if (upper_bound == NULL)
+		return (this->end());
+	return (const_iterator(upper_bound, &this->_rb_obj));
 }
 
-template<class Key, class T, class Comp, class Alloc>
-ft::pair<typename map<Key, T, Comp, Alloc>::iterator, typename map<Key, T, Comp, Alloc>::iterator>
-map<Key, T, Comp, Alloc>::equal_range(key_type const & k)
+template<class T, class Comp, class Alloc>
+ft::pair<typename set<T, Comp, Alloc>::iterator, typename set<T, Comp, Alloc>::iterator>
+set<T, Comp, Alloc>::equal_range(value_type const & val)
 {
-    return (ft::make_pair(this->lower_bound(k), this->upper_bound(k)));
+    return (ft::make_pair(this->lower_bound(val), this->upper_bound(val)));
 }
 
-template<class Key, class T, class Comp, class Alloc>
-ft::pair<typename map<Key, T, Comp, Alloc>::const_iterator, typename map<Key, T, Comp, Alloc>::const_iterator>
-map<Key, T, Comp, Alloc>::equal_range(key_type const & k) const
+template<class T, class Comp, class Alloc>
+ft::pair<typename set<T, Comp, Alloc>::const_iterator, typename set<T, Comp, Alloc>::const_iterator>
+set<T, Comp, Alloc>::equal_range(value_type const & val) const
 {
-    return (ft::make_pair(this->lower_bound(k), this->upper_bound(k)));
+    return (ft::make_pair(this->lower_bound(val), this->upper_bound(val)));
 }
 
 /*

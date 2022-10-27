@@ -372,6 +372,53 @@ node<T>*	rb_tree<T, Comp, Alloc>::rightmost_node(node<T>* node) const
 }
 
 /*
+ * lower_bound && upper_bound
+ */
+
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::lower_bound(T const & key) const
+{
+	node<T>*	temp = this->_root;
+	node<T>*	lower_bound = NULL;
+
+	while (temp != NULL)
+	{
+		if (!this->_comp(temp->key, key) && !this->_comp(key, temp->key))
+		{
+			lower_bound = temp;
+			break ;
+		}
+		if (this->_comp(key, temp->key) == true) // move to left
+		{
+			lower_bound = temp;
+			temp = temp->left;
+		}
+		else // move to right
+			temp = temp->right;
+	}
+	return (lower_bound);
+}
+
+template<class T, class Comp, class Alloc>
+node<T>*	rb_tree<T, Comp, Alloc>::upper_bound(T const & key) const
+{
+	node<T>*	temp = this->_root;
+	node<T>*	upper_bound = NULL;
+
+	while (temp != NULL)
+	{
+		if (this->_comp(key, temp->key) == true) // move to left
+		{
+			upper_bound = temp;
+			temp = temp->left;
+		}
+		else // move to right
+			temp = temp->right;
+	}
+	return (upper_bound);
+}
+
+/*
  * getters
  */
 

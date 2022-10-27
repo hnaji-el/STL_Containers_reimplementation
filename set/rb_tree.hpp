@@ -53,6 +53,10 @@ public:
 	node<T>*	leftmost_node(void) const;
 	node<T>*	rightmost_node(void) const;
 
+	// lower_bound && upper_bound
+	node<T>*	lower_bound(T const & key) const;
+	node<T>*	upper_bound(T const & key) const;
+
 	// getters
 	Compare	get_key_compare(void) const;
 	Alloc	get_allocator(void) const;

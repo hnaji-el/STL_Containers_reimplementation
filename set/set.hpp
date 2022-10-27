@@ -92,13 +92,13 @@ public:
 	size_type	size(void) const;
 	size_type	max_size(void) const;
 	bool		empty(void) const;
-	
+
 	// Operations: [ find && count && lower_bound && upper_bound ]
 	iterator		find(value_type const & val);
 	const_iterator	find(value_type const & val) const;
-	size_type		count(key_type const & val) const;
-	iterator		lower_bound(key_type const & k);
-	const_iterator	lower_bound(key_type const & k) const;
+	size_type		count(value_type const & val) const;
+	iterator		lower_bound(value_type const & val);
+	const_iterator	lower_bound(value_type const & val) const;
 	iterator		upper_bound(key_type const & k);
 	const_iterator	upper_bound(key_type const & k) const;
 	ft::pair<iterator, iterator>				equal_range(key_type const & k);
