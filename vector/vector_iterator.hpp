@@ -22,16 +22,14 @@ public:
 	typedef ptrdiff_t						difference_type;
 	typedef std::random_access_iterator_tag	iterator_category;
 
-private:
-	//	Constructor
-	vector_iterator(pointer ptr);
-
 public:
 	//	Constructors && Destructor
 	vector_iterator(void);
 	vector_iterator(vector_iterator const & src);
 	vector_iterator&	operator=(vector_iterator const & rhs);
 	~vector_iterator(void);
+
+    vector_iterator(pointer ptr);
 
 	// Conversion function (make iterator convertible to const_iterator)
 	operator vector_iterator<T const>() const;
@@ -63,10 +61,6 @@ public:
 	//	Compound assignment operators
 	vector_iterator&	operator+=(difference_type n);
 	vector_iterator&	operator-=(difference_type n);
-
-	// vector class template is friend of vector_iterator
-	template<class U, class Alloc>
-	friend class vector;
 };
 
 }
