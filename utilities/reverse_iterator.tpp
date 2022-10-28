@@ -83,9 +83,9 @@ reverse_iterator<Iterator>  reverse_iterator<Iterator>::operator--(int)
 template<class Iterator>
 typename reverse_iterator<Iterator>::reference	reverse_iterator<Iterator>::operator*(void) const
 {
-	iterator_type	logical_position = this->base_iterator - 1;
+	iterator_type	logical_position = this->base_iterator;
 
-	return (*logical_position);
+	return (*(--logical_position));
 }
 
 template<class Iterator>

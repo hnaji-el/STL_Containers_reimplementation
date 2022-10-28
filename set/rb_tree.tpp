@@ -11,13 +11,13 @@ namespace ft
 
 template<class T, class Comp, class Alloc>
 rb_tree<T, Comp, Alloc>::rb_tree(Comp const & comp, Alloc const & alloc)
-	: _root(), _size(), _comp(comp), _alloc(alloc), _past_the_last(), _inserted_state(), _node_alloc()
+	: _root(), _size(), _comp(comp), _alloc(alloc), _node_alloc(), _past_the_last(), _inserted_state()
 {
 }
 
 template<class T, class Comp, class Alloc>
 rb_tree<T, Comp, Alloc>::rb_tree(rb_tree const & src)
-	: _root(), _size(), _comp(src._comp), _alloc(src._alloc), _past_the_last(), _inserted_state(), _node_alloc()
+	: _root(), _size(), _comp(src._comp), _alloc(src._alloc), _node_alloc(), _past_the_last(), _inserted_state()
 {
 }
 
@@ -25,8 +25,7 @@ template<class T, class Comp, class Alloc>
 rb_tree<T, Comp, Alloc>&	rb_tree<T, Comp, Alloc>::operator=(rb_tree const & rhs)
 {
 	this->clear_rb();
-	this->_comp = rhs->_comp;
-	this->_alloc = rhs->_alloc;
+	this->_comp = rhs._comp;
 }
 
 template<class T, class Comp, class Alloc>

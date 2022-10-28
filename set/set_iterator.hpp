@@ -19,8 +19,8 @@ private:
 public:
 	//	Member types
 	typedef T								value_type;
-	typedef T*								pointer;
-	typedef T&								reference;
+	typedef T const *						pointer;
+	typedef T const &						reference;
 	typedef ptrdiff_t						difference_type;
 	typedef std::bidirectional_iterator_tag	iterator_category;
 

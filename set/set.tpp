@@ -20,10 +20,8 @@ set<T, Comp, Alloc>::set(key_compare const & comp, allocator_type const & alloc)
 
 template<class T, class Comp, class Alloc>
 template <class InputIterator>
-set<T, Comp, Alloc>::set(InputIterator first,
-						InputIterator last,
-						key_compare const & comp,
-						allocator_type const & alloc)
+set<T, Comp, Alloc>::set(InputIterator first, InputIterator last,
+						key_compare const & comp, allocator_type const & alloc)
 	: _rb_obj(comp, alloc)
 {
 	this->insert(first, last);
@@ -48,8 +46,11 @@ set<T, Comp, Alloc>::~set(void)
 template<class T, class Comp, class Alloc>
 set<T, Comp, Alloc>&	set<T, Comp, Alloc>::operator=(set const & rhs)
 {
-	this->_rb_obj = rhs._rb_obj;
-    this->insert(rhs.begin(), rhs.end());
+	it (this != &rhs)
+	{
+		this->_rb_obj = rhs._rb_obj;
+    	this->insert(rhs.begin(), rhs.end());
+	}
     return (*this);
 }
 

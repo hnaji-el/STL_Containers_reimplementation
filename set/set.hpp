@@ -41,8 +41,8 @@ public:
 	typedef typename ft::iterator_traits<iterator>::difference_type	difference_type;
 	typedef size_t	size_type;
 	// iterators:
-	typedef ft::map_iterator<value_type      , node<value_type>      , rb_tree_t      >	iterator;
-	typedef ft::map_iterator<value_type const, node<value_type> const, rb_tree_t const>	const_iterator;
+	typedef ft::set_iterator<value_type      , node<value_type>      , rb_tree_t      >	iterator;
+	typedef ft::set_iterator<value_type const, node<value_type> const, rb_tree_t const>	const_iterator;
 	typedef ft::reverse_iterator<iterator>			reverse_iterator;
 	typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 	
@@ -52,16 +52,14 @@ public:
 				allocator_type const & alloc = allocator_type());
 	
 	template <class InputIterator>
-	set(InputIterator first,
-		InputIterator last,
-		key_compare const & comp = key_compare(),
-		allocator_type const & alloc = allocator_type());
+	set(InputIterator first, InputIterator last,
+		key_compare const & comp = key_compare(), allocator_type const & alloc = allocator_type());
 	
 	set(set const & x);
 	~set(void);
 	
 	// Copy assignment operator
-	map&    operator=(map const & rhs);
+	set&    operator=(set const & rhs);
 	
 	// Modifiers: [ insert ]
 	ft::pair<iterator, bool>	insert(value_type const & val); // single element
