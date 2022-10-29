@@ -1,27 +1,27 @@
 
-VECTOR = vector
-STACK = stack
-MAP = map
-SET = set
+VECTOR = _vector_
+STACK = _stack_
+MAP = _map_
+SET = _set_
 
-NAME = vector
+NAME = _vector_
 
-SRC_VECTOR = ./vector/main.cpp
+SRC_VECTOR = ./vector/vector_tests.cpp
 HEADERS_VECTOR = ./vector/vector.hpp \
 				 ./vector/vector.tpp \
 				 ./vector/vector_iterator.hpp \
 				 ./vector/vector_iterator.tpp
 
-SRC_STACK = ./stack/main.cpp
+SRC_STACK = ./stack/stack_tests.cpp
 HEADERS_STACK = ./stack/stack.hpp
 
-SRC_MAP = ./map/main.cpp
+SRC_MAP = ./map/map_tests.cpp
 HEADERS_MAP = ./map/map.hpp ./map/map.tpp \
 			  ./map/avl_tree.hpp ./map/avl_tree.tpp \
 			  ./map/avl_node.hpp ./map/avl_node.tpp \
 			  ./map/map_iterator.hpp ./map/map_iterator.tpp
 
-SRC_SET = ./set/main.cpp
+SRC_SET = ./set/set_tests.cpp
 HEADERS_SET = ./set/set.hpp ./set/set.tpp \
 			  ./set/rb_tree.hpp ./set/rb_tree.tpp \
 			  ./set/node.hpp ./set/node.tpp \

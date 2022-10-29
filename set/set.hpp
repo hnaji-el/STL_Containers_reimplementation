@@ -15,6 +15,7 @@
 # include <algorithm>
 # include <functional>
 # include <memory>
+# include <cstddef>
 
 namespace ft
 {
@@ -38,8 +39,8 @@ public:
 	typedef typename Alloc::const_reference	const_reference;
 	typedef typename Alloc::pointer			pointer;
 	typedef typename Alloc::const_pointer	const_pointer;
-	typedef typename ft::iterator_traits<iterator>::difference_type	difference_type;
-	typedef size_t	size_type;
+	typedef ptrdiff_t	difference_type;
+	typedef size_t		size_type;
 	// iterators:
 	typedef ft::set_iterator<value_type      , node<value_type>      , rb_tree_t      >	iterator;
 	typedef ft::set_iterator<value_type const, node<value_type> const, rb_tree_t const>	const_iterator;

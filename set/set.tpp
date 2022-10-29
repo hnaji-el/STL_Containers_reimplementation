@@ -46,7 +46,7 @@ set<T, Comp, Alloc>::~set(void)
 template<class T, class Comp, class Alloc>
 set<T, Comp, Alloc>&	set<T, Comp, Alloc>::operator=(set const & rhs)
 {
-	it (this != &rhs)
+	if (this != &rhs)
 	{
 		this->_rb_obj = rhs._rb_obj;
     	this->insert(rhs.begin(), rhs.end());
@@ -66,7 +66,7 @@ pair<typename set<T, Comp, Alloc>::iterator, bool>	set<T, Comp, Alloc>::insert(v
 	size_type const	old_size = this->_rb_obj.size();
 
 	this->_rb_obj.insert(val);
-	iter = iterator(&this->_rb_obj, this->_rb_obj._inserted_state);
+	iter = iterator(this->_rb_obj._inserted_state, &this->_rb_obj);
 	if (old_size == this->_rb_obj.size())
 	    return (ft::make_pair(iter, false));
 	return (ft::make_pair(iter, true));
@@ -104,7 +104,7 @@ typename set<T, Comp, Alloc>::size_type	set<T, Comp, Alloc>::erase(value_type co
 {
 	size_type const		old_size = this->_rb_obj.size();
 
-	this->_rb_obj.remove(k);
+	this->_rb_obj.remove(val);
 	if (old_size == this->_rb_obj.size())
 		return (0);
 	return (1);
@@ -153,7 +153,7 @@ template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::begin(void)
 {
 	if (this->empty())
-		return (iterator(&(this->_rb_obj.past_the_last), &this->_rb_obj));
+		return (iterator(&(this->_rb_obj._past_the_last), &this->_rb_obj));
 	return (iterator(this->_rb_obj.leftmost_node(), &this->_rb_obj));
 }
 
@@ -161,20 +161,20 @@ template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::const_iterator	set<T, Comp, Alloc>::begin(void) const
 {
 	if (this->empty())
-		return (const_iterator(&(this->_rb_obj.past_the_last), &this->_rb_obj));
+		return (const_iterator(&(this->_rb_obj._past_the_last), &this->_rb_obj));
 	return (const_iterator(this->_rb_obj.leftmost_node(), &this->_rb_obj));
 }
 
 template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::end(void)
 {
-	return (iterator(&(this->_rb_obj.past_the_last), &this->_rb_obj));
+	return (iterator(&(this->_rb_obj._past_the_last), &this->_rb_obj));
 }
 
 template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::const_iterator	set<T, Comp, Alloc>::end(void) const
 {
-	return (const_iterator(&(this->_rb_obj.past_the_last), &this->_rb_obj));
+	return (const_iterator(&(this->_rb_obj._past_the_last), &this->_rb_obj));
 }
 
 template<class T, class Comp, class Alloc>
@@ -262,7 +262,7 @@ typename set<T, Comp, Alloc>::size_type	set<T, Comp, Alloc>::count(value_type co
 template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::lower_bound(value_type const & val)
 {
-	node<value_type>* const		lower_bound = this->_rb.obj.lower_bound(val);
+	node<value_type>* const		lower_bound = this->_rb_obj.lower_bound(val);
 
 	if (lower_bound == NULL)
 		return (this->end());
@@ -272,7 +272,7 @@ typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::lower_bound(value_ty
 template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::const_iterator	set<T, Comp, Alloc>::lower_bound(value_type const & val) const
 {
-	const node<value_type>* const	lower_bound = this->_rb.obj.lower_bound(val);
+	const node<value_type>* const	lower_bound = this->_rb_obj.lower_bound(val);
 
 	if (lower_bound == NULL)
 		return (this->end());
@@ -283,7 +283,7 @@ typename set<T, Comp, Alloc>::const_iterator	set<T, Comp, Alloc>::lower_bound(va
 template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::upper_bound(value_type const & val)
 {
-	node<value_type>* const		upper_bound = this->_rb.obj.upper_bound(val);
+	node<value_type>* const		upper_bound = this->_rb_obj.upper_bound(val);
 
 	if (upper_bound == NULL)
 		return (this->end());
@@ -293,7 +293,7 @@ typename set<T, Comp, Alloc>::iterator	set<T, Comp, Alloc>::upper_bound(value_ty
 template<class T, class Comp, class Alloc>
 typename set<T, Comp, Alloc>::const_iterator	set<T, Comp, Alloc>::upper_bound(value_type const & val) const
 {
-	const node<value_type>* const	upper_bound = this->_rb.obj.upper_bound(val);
+	const node<value_type>* const	upper_bound = this->_rb_obj.upper_bound(val);
 
 	if (upper_bound == NULL)
 		return (this->end());
@@ -318,20 +318,20 @@ set<T, Comp, Alloc>::equal_range(value_type const & val) const
  * Observers:
  */
 
-template<class T, class Compare, class Alloc>
-typename set<T, Compate, Alloc>::key_compare	set<T, Comp, Alloc>::key_comp(void) const
+template<class T, class Comp, class Alloc>
+typename set<T, Comp, Alloc>::key_compare	set<T, Comp, Alloc>::key_comp(void) const
 {
 	return (this->_rb_obj.get_key_compare());
 }
 
-template<class T, class Compare, class Alloc>
-typename set<T, Compare, Alloc>::value_compare	set<T, Comp, Alloc>::value_comp(void) const
+template<class T, class Comp, class Alloc>
+typename set<T, Comp, Alloc>::value_compare	set<T, Comp, Alloc>::value_comp(void) const
 {
 	return (this->key_comp());
 }
 
-template<class T, class Compare, class Alloc>
-Alloc	set<T, Comp, Alloc>::get_allocator(void) const
+template<class T, class Comp, class Alloc>
+typename set<T, Comp, Alloc>::allocator_type	set<T, Comp, Alloc>::get_allocator(void) const
 {
 	return (this->_rb_obj.get_allocator());
 }

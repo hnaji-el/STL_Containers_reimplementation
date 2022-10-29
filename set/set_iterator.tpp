@@ -22,8 +22,9 @@ set_iterator<T, Node, RbTree>::set_iterator(Node* ptr, RbTree* rb_ptr)
 }
 
 template<class T, class Node, class RbTree>
-set_iterator<T, Node, RbTree>::set_iterator(set_iterator const & src)
-	: _ptr(src._ptr), _rb_ptr(src._rb_ptr)
+template<class U, class E, class F>
+set_iterator<T, Node, RbTree>::set_iterator(set_iterator<U, E, F> const & src)
+	: _ptr((Node*)src._ptr), _rb_ptr((RbTree*)src._rb_ptr)
 {
 }
 
@@ -47,11 +48,11 @@ set_iterator<T, Node, RbTree>::~set_iterator(void)
  * One way conversion: iterator ---> const_iterator
  */
 
-template<class T, class Node, class RbTree>
-set_iterator<T, Node, RbTree>::operator set_iterator<T const, Node const, RbTree const>() const
-{
-	return (set_iterator<T const, Node const, RbTree const>(this->_ptr, this->_rb_ptr));
-}
+// template<class T, class Node, class RbTree>
+// set_iterator<T, Node, RbTree>::operator set_iterator<T const, Node const, RbTree const>() const
+// {
+// 	return (set_iterator<T const, Node const, RbTree const>(this->_ptr, this->_rb_ptr));
+// }
 
 /*
  * increment/decrement operators: [ operator++ && operator-- ]

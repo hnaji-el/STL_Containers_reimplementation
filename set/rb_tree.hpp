@@ -34,6 +34,9 @@ public:
 	rb_tree(rb_tree const & src);
 	rb_tree&	operator=(rb_tree const & rhs);
 	~rb_tree(void);
+		void		remove_minimum(void);
+	node<T>*	remove_minimum(node<T>* root);
+
 	
 	// search, insert and remove operations of red-black tree
 	node<T>*	search(T const & key) const;
@@ -43,7 +46,7 @@ public:
 	void	swap(rb_tree& x);
 
 	// size && is_empty && max_size
-	size_type	max_size() const;
+	size_t	max_size() const;
 	size_t	size(void) const;
 	bool	is_empty(void) const;
 	
