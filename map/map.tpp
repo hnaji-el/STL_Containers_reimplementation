@@ -20,10 +20,8 @@ map<Key, T, Comp, Alloc>::map(key_compare const & comp, allocator_type const & a
 
 template<class Key, class T, class Comp, class Alloc>
 template <class InputIterator>
-map<Key, T, Comp, Alloc>::map(InputIterator first,
-                              InputIterator last,
-                              key_compare const & comp,
-                              allocator_type const & alloc)
+map<Key, T, Comp, Alloc>::map(InputIterator first, InputIterator last,
+								key_compare const & comp, allocator_type const & alloc)
 	: _avl_obj(comp), _comp(comp), _alloc(alloc)
 {
     this->insert(first, last);
@@ -46,68 +44,16 @@ map<Key, T, Comp, Alloc>::~map(void)
  */
 
 template<class Key, class T, class Comp, class Alloc>
-map<Key, T, Comp, Alloc>&   map<Key, T, Comp, Alloc>::operator=(map const & rhs)
+map<Key, T, Comp, Alloc>&	map<Key, T, Comp, Alloc>::operator=(map const & rhs)
 {
-    this->clear();
-    this->insert(rhs.begin(), rhs.end());
-    this->_comp = this->_avl_obj.comp = rhs.key_comp();
+	if (this != &rhs)
+	{
+		this->_avl_obj = rhs._avl_obj;
+		this->_comp = rhs._comp;
+		this->_alloc = rhs._alloc;
+    	this->insert(rhs.begin(), rhs.end());
+	}
     return (*this);
-}
-
-/*
- * Iterators:
- */
-
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::iterator map<Key, T, Comp, Alloc>::begin(void)
-{
-    if (this->_avl_obj.root == NULL)
-        return (iterator(&(this->_avl_obj), &(this->_avl_obj.past_the_last)));
-    return (iterator(&(this->_avl_obj), this->_avl_obj.leftmost_node(this->_avl_obj.root)));
-}
-
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::const_iterator   map<Key, T, Comp, Alloc>::begin(void) const
-{
-    if (this->_avl_obj.root == NULL)
-        return (const_iterator(&(this->_avl_obj), &(this->_avl_obj.past_the_last)));
-    return (const_iterator(&(this->_avl_obj), this->_avl_obj.leftmost_node(this->_avl_obj.root)));
-}
-
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::iterator map<Key, T, Comp, Alloc>::end(void)
-{
-    return (iterator(&(this->_avl_obj), &(this->_avl_obj.past_the_last)));
-}
-
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::const_iterator   map<Key, T, Comp, Alloc>::end(void) const
-{
-    return (const_iterator(&(this->_avl_obj), &(this->_avl_obj.past_the_last)));
-}
-
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::reverse_iterator map<Key, T, Comp, Alloc>::rbegin(void)
-{
-    return (reverse_iterator(this->end()));
-}
-
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::const_reverse_iterator   map<Key, T, Comp, Alloc>::rbegin(void) const
-{
-    return (const_reverse_iterator(this->end()));
-}
-
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::reverse_iterator map<Key, T, Comp, Alloc>::rend(void)
-{
-    return (reverse_iterator(this->begin()));
-}
-
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::const_reverse_iterator   map<Key, T, Comp, Alloc>::rend(void) const
-{
-    return (const_reverse_iterator(this->begin()));
 }
 
 /*
@@ -117,21 +63,19 @@ typename map<Key, T, Comp, Alloc>::const_reverse_iterator   map<Key, T, Comp, Al
 template<class Key, class T, class Comp, class Alloc>
 pair<typename map<Key, T, Comp, Alloc>::iterator, bool>	map<Key, T, Comp, Alloc>::insert(value_type const & val)
 {
-    size_type   size = this->_avl_obj.size;
-    iterator    iter;
+    iterator    	iter;
+    size_type const	size = this->_avl_obj.size();
 
-	this->_avl_obj.root = this->_avl_obj.insert(this->_avl_obj.root, val);
-    iter = iterator(&(this->_avl_obj), this->_avl_obj.inserted_state);
-    if (size == this->_avl_obj.size)
+	this->_avl_obj.insert(val);
+    iter = iterator(&this->_avl_obj, this->_avl_obj.inserted_state);
+    if (size == this->_avl_obj.size())
         return (ft::make_pair(iter, false));
     return (ft::make_pair(iter, true));
 }
 
 template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::iterator	map<Key, T, Comp, Alloc>::insert(iterator position, value_type const & val)
+typename map<Key, T, Comp, Alloc>::iterator	map<Key, T, Comp, Alloc>::insert(iterator, value_type const & val)
 {
-    if (position->first == val.first)
-        return (position);
     return (this->insert(val).first);
 }
 
@@ -139,11 +83,11 @@ template<class Key, class T, class Comp, class Alloc>
 template<class InputIterator>
 void	map<Key, T, Comp, Alloc>::insert(InputIterator first, InputIterator last)
 {
-    while (first != last)
-    {
-        this->insert(*first);
-        first++;
-    }
+	while (first != last)
+	{
+		this->insert(*first);
+		first++;
+	}
 }
 
 /*
@@ -151,44 +95,33 @@ void	map<Key, T, Comp, Alloc>::insert(InputIterator first, InputIterator last)
  */
 
 template<class Key, class T, class Comp, class Alloc>
-void    map<Key, T, Comp, Alloc>::erase(iterator position)
+void	map<Key, T, Comp, Alloc>::erase(iterator position)
 {
-    this->_avl_obj.root = this->_avl_obj.remove(this->_avl_obj.root, position->first);
+	this->_avl_obj.remove(position->first);
 }
 
 template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::size_type   map<Key, T, Comp, Alloc>::erase(key_type const & k)
+typename map<Key, T, Comp, Alloc>::size_type	map<Key, T, Comp, Alloc>::erase(key_type const & k)
 {
-    size_type const size = this->_avl_obj.size;
+	size_type const		size = this->_avl_obj.size();
 
-    this->_avl_obj.root = this->_avl_obj.remove(this->_avl_obj.root, k);
-    if (size == this->_avl_obj.size)
-        return (0);
-    return (1);
+	this->_avl_obj.remove(k);
+	if (size == this->_avl_obj.size())
+		return (0);
+	return (1);
 }
 
 template<class Key, class T, class Comp, class Alloc>
 void    map<Key, T, Comp, Alloc>::erase(iterator first, iterator last)
 {
-    typedef typename allocator_type::template rebind<key_type>::other   key_type_alloc;
+	iterator	save(first);
 
-    key_type_alloc  key_alloc;
-    key_type*   ptr;
-    size_t  num_of_element = 0;
-
-    for (iterator it = first; it != last; it++)
-        num_of_element++;
-
-    ptr = key_alloc.allocate(num_of_element);
-    for (size_t i = 0; first != last; i++, first++)
-        key_alloc.construct(ptr + i, first->first);
-
-    for (size_t i = 0; i < num_of_element; i++)
-    {
-        this->erase(ptr[i]);
-        key_alloc.destroy(ptr + i);
-    }
-    key_alloc.deallocate(ptr, num_of_element);
+	while (first != last)
+	{
+		++save;
+		this->erase(first);
+		first = save;
+	}
 }
 
 /*
@@ -198,18 +131,77 @@ void    map<Key, T, Comp, Alloc>::erase(iterator first, iterator last)
 template<class Key, class T, class Comp, class Alloc>
 void   map<Key, T, Comp, Alloc>::clear(void)
 {
-    this->_avl_obj.root = this->_avl_obj.clear_avl(this->_avl_obj.root);
+	this->_avl_obj.clear_avl();
 }
 
 template<class Key, class T, class Comp, class Alloc>
 void    map<Key, T, Comp, Alloc>::swap(map& x)
 {
+	this->_avl_obj.swap(x._avl_obj);
     std::swap(this->_comp, x._comp);
     std::swap(this->_alloc, x._alloc);
-    std::swap(this->_avl_obj.root, x._avl_obj.root);
-    std::swap(this->_avl_obj.size, x._avl_obj.size);
-    std::swap(this->_avl_obj.comp, x._avl_obj.comp);
-    std::swap(this->_avl_obj.alloc, x._avl_obj.alloc);
+}
+
+template<class Key, class T, class Comp, class Alloc>
+void	swap(map<Key, T, Comp, Alloc>& lhs, map<Key, T, Comp, Alloc>& rhs)
+{
+	lhs.swap(rhs);
+}
+
+/*
+ * Iterators:
+ */
+
+template<class Key, class T, class Comp, class Alloc>
+typename map<Key, T, Comp, Alloc>::iterator	map<Key, T, Comp, Alloc>::begin(void)
+{
+	if (this->empty())
+		return (iterator(&this->_avl_obj, &this->_avl_obj.past_the_last));
+	return (iterator(&this->_avl_obj, this->_avl_obj.leftmost_node()));
+}
+
+template<class Key, class T, class Comp, class Alloc>
+typename map<Key, T, Comp, Alloc>::const_iterator	map<Key, T, Comp, Alloc>::begin(void) const
+{
+	if (this->empty())
+		return (const_iterator(&this->_avl_obj, &this->_avl_obj.past_the_last));
+	return (const_iterator(&this->_avl_obj, this->_avl_obj.leftmost_node()));
+}
+
+template<class Key, class T, class Comp, class Alloc>
+typename map<Key, T, Comp, Alloc>::iterator	map<Key, T, Comp, Alloc>::end(void)
+{
+	return (iterator(&this->_avl_obj, &this->_avl_obj.past_the_last));
+}
+
+template<class Key, class T, class Comp, class Alloc>
+typename map<Key, T, Comp, Alloc>::const_iterator	map<Key, T, Comp, Alloc>::end(void) const
+{
+	return (const_iterator(&this->_avl_obj, &this->_avl_obj.past_the_last));
+}
+
+template<class Key, class T, class Comp, class Alloc>
+typename map<Key, T, Comp, Alloc>::reverse_iterator	map<Key, T, Comp, Alloc>::rbegin(void)
+{
+	return (reverse_iterator(this->end()));
+}
+
+template<class Key, class T, class Comp, class Alloc>
+typename map<Key, T, Comp, Alloc>::const_reverse_iterator	map<Key, T, Comp, Alloc>::rbegin(void) const
+{
+	return (const_reverse_iterator(this->end()));
+}
+
+template<class Key, class T, class Comp, class Alloc>
+typename map<Key, T, Comp, Alloc>::reverse_iterator	map<Key, T, Comp, Alloc>::rend(void)
+{
+	return (reverse_iterator(this->begin()));
+}
+
+template<class Key, class T, class Comp, class Alloc>
+typename map<Key, T, Comp, Alloc>::const_reverse_iterator	map<Key, T, Comp, Alloc>::rend(void) const
+{
+	return (const_reverse_iterator(this->begin()));
 }
 
 /*
@@ -217,12 +209,12 @@ void    map<Key, T, Comp, Alloc>::swap(map& x)
  */
 
 template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::mapped_type&    map<Key, T, Comp, Alloc>::operator[](key_type const & k)
+typename map<Key, T, Comp, Alloc>::mapped_type&		map<Key, T, Comp, Alloc>::operator[](key_type const & k)
 {
-    ft::pair<iterator, bool>    ret;
+	ft::pair<iterator, bool>	ret;
 
-    ret = this->insert(ft::make_pair(k, mapped_type()));
-    return (ret.first->second);
+	ret = this->insert(ft::make_pair(k, mapped_type()));
+	return (ret.first->second);
 }
 
 /*
@@ -230,15 +222,15 @@ typename map<Key, T, Comp, Alloc>::mapped_type&    map<Key, T, Comp, Alloc>::ope
  */
 
 template<class Key, class T, class Comp, class Alloc>
-bool    map<Key, T, Comp, Alloc>::empty(void) const
+bool	map<Key, T, Comp, Alloc>::empty(void) const
 {
-    return (this->_avl_obj.size == 0);
+	return (this->_avl_obj.is_empty());
 }
 
 template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::size_type    map<Key, T, Comp, Alloc>::size(void) const
+typename map<Key, T, Comp, Alloc>::size_type	map<Key, T, Comp, Alloc>::size(void) const
 {
-    return (this->_avl_obj.size);
+	return (this->_avl_obj.size());
 }
 
 template<class Key, class T, class Comp, class Alloc>
@@ -250,33 +242,33 @@ typename map<Key, T, Comp, Alloc>::size_type    map<Key, T, Comp, Alloc>::max_si
 /*
  * Operations: [ find && count ]
  */
-template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::iterator        map<Key, T, Comp, Alloc>::find(key_type const & k)
-{
-    avl_node<value_type>*   temp;
 
-    temp = this->_avl_obj.search(this->_avl_obj.root, k);
-    if (temp == NULL)
-        return (this->end());
-    return (iterator(&(this->_avl_obj), temp));
+template<class Key, class T, class Comp, class Alloc>
+typename map<Key, T, Comp, Alloc>::iterator		map<Key, T, Comp, Alloc>::find(key_type const & k)
+{
+	node<value_type>* const		temp = this->_avl_obj.search(k);
+
+	if (temp == NULL)
+		return (this->end());
+	return (iterator(&this->_avl_obj, temp));
 }
 
 template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::const_iterator  map<Key, T, Comp, Alloc>::find(key_type const & k) const
+typename map<Key, T, Comp, Alloc>::const_iterator	map<Key, T, Comp, Alloc>::find(key_type const & k) const
 {
-    const avl_node<value_type>* const   temp = this->_avl_obj.search(this->_avl_obj.root, k);
+	const node<value_type>* const	temp = this->_avl_obj.search(k);
 
-    if (temp == NULL)
-        return (this->end());
-    return (const_iterator(&(this->_avl_obj), temp));
+	if (temp == NULL)
+		return (this->end());
+	return (const_iterator(&this->_avl_obj, temp));
 }
 
 template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::size_type    map<Key, T, Comp, Alloc>::count(key_type const & k) const
+typename map<Key, T, Comp, Alloc>::size_type	map<Key, T, Comp, Alloc>::count(key_type const & k) const
 {
-    if (this->_avl_obj.search(this->_avl_obj.root, k) == NULL)
-        return (0);
-    return (1);
+	if (this->_avl_obj.search(k) == NULL)
+		return (0);
+	return (1);
 }
 
 /*
@@ -284,97 +276,43 @@ typename map<Key, T, Comp, Alloc>::size_type    map<Key, T, Comp, Alloc>::count(
  */
 
 template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::iterator map<Key, T, Comp, Alloc>::lower_bound(key_type const & k)
+typename map<Key, T, Comp, Alloc>::iterator	map<Key, T, Comp, Alloc>::lower_bound(key_type const & k)
 {
-    avl_node<value_type> const *    temp = this->_avl_obj.root;
-    avl_node<value_type> const *    lower_bound = NULL;
+	node<value_type>* const		lower_bound = this->_avl_obj.lower_bound(k);
 
-    while (temp != NULL)
-    {
-        if (!this->_comp(temp->data.first, k) && !this->_comp(k, temp->data.first))
-        {
-            lower_bound = temp;
-            break ;
-        }
-        if (this->_comp(k, temp->data.first) == true)
-        {
-            lower_bound = temp;
-            temp = temp->left;
-        }
-        else
-            temp = temp->right;
-    }
-    if (lower_bound == NULL)
-        return (this->end());
-    return (iterator(&(this->_avl_obj), (avl_node<value_type>*)lower_bound));
+	if (lower_bound == NULL)
+		return (this->end());
+	return (iterator(&this->_avl_obj, lower_bound));
 }
 
 template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::const_iterator   map<Key, T, Comp, Alloc>::lower_bound(key_type const & k) const
+typename map<Key, T, Comp, Alloc>::const_iterator	map<Key, T, Comp, Alloc>::lower_bound(key_type const & k) const
 {
-    avl_node<value_type> const *    temp = this->_avl_obj.root;
-    avl_node<value_type> const *    lower_bound = NULL;
+	const node<value_type>* const	lower_bound = this->_avl_obj.lower_bound(k);
 
-    while (temp != NULL)
-    {
-        if (!this->_comp(temp->data.first, k) && !this->_comp(k, temp->data.first))
-        {
-            lower_bound = temp;
-            break ;
-        }
-        if (this->_comp(k, temp->data.first) == true)
-        {
-            lower_bound = temp;
-            temp = temp->left;
-        }
-        else
-            temp = temp->right;
-    }
-    if (lower_bound == NULL)
-        return (this->end());
-    return (const_iterator(&(this->_avl_obj), lower_bound));
+	if (lower_bound == NULL)
+		return (this->end());
+	return (const_iterator(&this->_avl_obj, lower_bound));
 }
 
 template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::iterator map<Key, T, Comp, Alloc>::upper_bound(key_type const & k)
+typename map<Key, T, Comp, Alloc>::iterator	map<Key, T, Comp, Alloc>::upper_bound(key_type const & k)
 {
-    avl_node<value_type> const *    temp = this->_avl_obj.root;
-    avl_node<value_type> const *    upper_bound = NULL;
+	node<value_type>* const		upper_bound = this->_avl_obj.upper_bound(k);
 
-    while (temp != NULL)
-    {
-        if (this->_comp(k, temp->data.first) == true)
-        {
-            upper_bound = temp;
-            temp = temp->left;
-        }
-        else
-            temp = temp->right;
-    }
     if (upper_bound == NULL)
         return (this->end());
-    return (iterator(&(this->_avl_obj), (avl_node<value_type>*)upper_bound));
+    return (iterator(&this->_avl_obj, upper_bound));
 }
 
 template<class Key, class T, class Comp, class Alloc>
-typename map<Key, T, Comp, Alloc>::const_iterator   map<Key, T, Comp, Alloc>::upper_bound(key_type const & k) const
+typename map<Key, T, Comp, Alloc>::const_iterator	map<Key, T, Comp, Alloc>::upper_bound(key_type const & k) const
 {
-    avl_node<value_type> const *    temp = this->_avl_obj.root;
-    avl_node<value_type> const *    upper_bound = NULL;
+	const node<value_type>* const	upper_bound = this->_avl_obj.upper_bound(k);
 
-    while (temp != NULL)
-    {
-        if (this->_comp(k, temp->data.first) == true)
-        {
-            upper_bound = temp;
-            temp = temp->left;
-        }
-        else
-            temp = temp->right;
-    }
     if (upper_bound == NULL)
         return (this->end());
-    return (const_iterator(&(this->_avl_obj), upper_bound));
+    return (const_iterator(&this->_avl_obj, upper_bound));
 }
 
 template<class Key, class T, class Comp, class Alloc>
@@ -404,7 +342,7 @@ typename map<Key, T, Comp, Alloc>::key_compare	map<Key, T, Comp, Alloc>::key_com
 template<class Key, class T, class Comp, class Alloc>
 typename map<Key, T, Comp, Alloc>::value_compare	map<Key, T, Comp, Alloc>::value_comp(void) const
 {
-    return (value_compare(this->_comp));
+	return (value_compare(this->_comp));
 }
 
 template<class Key, class T, class Comp, class Alloc>
@@ -413,50 +351,44 @@ typename map<Key, T, Comp, Alloc>::allocator_type	map<Key, T, Comp, Alloc>::get_
 	return (this->_alloc);
 }
 
-template< class Key, class T, class Compare, class Alloc >
-void    swap(map<Key,T,Compare,Alloc>& lhs, map<Key,T,Compare,Alloc>& rhs )
-{
-    lhs.swap(rhs);
-}
-
 /*
  * Relational operators:
  */
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator==(const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class Key, class T, class Comp, class Alloc>
+bool	operator==(map<Key, T, Comp, Alloc> const & lhs, map<Key, T, Comp, Alloc> const & rhs)
 {
-    return ((lhs.size() == rhs.size()) && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+	return ((lhs.size() == rhs.size()) && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 }
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator!=(const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class Key, class T, class Comp, class Alloc>
+bool	operator!=(map<Key, T, Comp, Alloc> const & lhs, map<Key, T, Comp, Alloc> const & rhs)
 {
-    return !(lhs == rhs);
+	return (!(lhs == rhs));
 }
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator< (const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class Key, class T, class Comp, class Alloc>
+bool	operator<(map<Key, T, Comp, Alloc> const & lhs, map<Key, T, Comp, Alloc> const & rhs)
 {
-    return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 }
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator<= (const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class Key, class T, class Comp, class Alloc>
+bool	operator<=(map<Key, T, Comp, Alloc> const & lhs, map<Key, T, Comp, Alloc> const & rhs)
 {
-    return (!(rhs < lhs));
+	return (!(rhs < lhs));
 }
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator> (const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class Key, class T, class Comp, class Alloc>
+bool	operator>(map<Key, T, Comp, Alloc> const & lhs, map<Key, T, Comp, Alloc> const & rhs)
 {
-    return (rhs < lhs);
+	return (rhs < lhs);
 }
 
-template < class Key, class T, class Comp, class Alloc >
-bool    operator>= (const map<Key, T, Comp, Alloc> &lhs, const map<Key, T, Comp, Alloc> &rhs)
+template<class Key, class T, class Comp, class Alloc>
+bool	operator>=(map<Key, T, Comp, Alloc> const & lhs, map<Key, T, Comp, Alloc> const & rhs)
 {
-    return (!(lhs < rhs));
+	return (!(lhs < rhs));
 }
 
 }

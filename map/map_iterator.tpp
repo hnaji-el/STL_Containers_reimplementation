@@ -9,33 +9,33 @@ namespace ft
 /*-                      Constructors && Destructor                          -*/
 /*----------------------------------------------------------------------------*/
 
-template<class T, class AvlNode, class AvlTree>
-map_iterator<T, AvlNode, AvlTree>::map_iterator(void) : _avl_ptr(), _ptr()
+template<class T, class Node, class AvlTree>
+map_iterator<T, Node, AvlTree>::map_iterator(void) : _avl_ptr(), _ptr()
 {
 }
 
-template<class T, class AvlNode, class AvlTree>
-map_iterator<T, AvlNode, AvlTree>::map_iterator(AvlTree* avl_ptr, AvlNode* ptr)
+template<class T, class Node, class AvlTree>
+map_iterator<T, Node, AvlTree>::map_iterator(AvlTree* avl_ptr, Node* ptr)
 	: _avl_ptr(avl_ptr), _ptr(ptr)
 {
 }
 
-template<class T, class AvlNode, class AvlTree>
-map_iterator<T, AvlNode, AvlTree>::map_iterator(map_iterator const & src)
+template<class T, class Node, class AvlTree>
+map_iterator<T, Node, AvlTree>::map_iterator(map_iterator const & src)
 	: _avl_ptr(src._avl_ptr), _ptr(src._ptr)
 {
 }
 
-template<class T, class AvlNode, class AvlTree>
-map_iterator<T, AvlNode, AvlTree>&	map_iterator<T, AvlNode, AvlTree>::operator=(map_iterator const & rhs)
+template<class T, class Node, class AvlTree>
+map_iterator<T, Node, AvlTree>&	map_iterator<T, Node, AvlTree>::operator=(map_iterator const & rhs)
 {
 	this->_avl_ptr = rhs._avl_ptr;
 	this->_ptr = rhs._ptr;
 	return (*this);
 }
 
-template<class T, class AvlNode, class AvlTree>
-map_iterator<T, AvlNode, AvlTree>::~map_iterator(void)
+template<class T, class Node, class AvlTree>
+map_iterator<T, Node, AvlTree>::~map_iterator(void)
 {
 }
 
@@ -43,10 +43,10 @@ map_iterator<T, AvlNode, AvlTree>::~map_iterator(void)
 /*-             one way conversion: iterator -> const_iterator               -*/
 /*----------------------------------------------------------------------------*/
 
-template<class T, class AvlNode, class AvlTree>
-map_iterator<T, AvlNode, AvlTree>::operator map_iterator<T const, AvlNode const, AvlTree const>() const
+template<class T, class Node, class AvlTree>
+map_iterator<T, Node, AvlTree>::operator map_iterator<T const, Node const, AvlTree const>() const
 {
-	return (map_iterator<T const, AvlNode const, AvlTree const>(this->_avl_ptr, this->_ptr));
+	return (map_iterator<T const, Node const, AvlTree const>(this->_avl_ptr, this->_ptr));
 }
 
 /*----------------------------------------------------------------------------*/
@@ -54,35 +54,35 @@ map_iterator<T, AvlNode, AvlTree>::operator map_iterator<T const, AvlNode const,
 /*-                   pre_decrement and post_decrement                       -*/
 /*----------------------------------------------------------------------------*/
 
-template<class T, class AvlNode, class AvlTree>
-map_iterator<T, AvlNode, AvlTree>&	map_iterator<T, AvlNode, AvlTree>::operator++(void)
+template<class T, class Node, class AvlTree>
+map_iterator<T, Node, AvlTree>&	map_iterator<T, Node, AvlTree>::operator++(void)
 {
-	this->_ptr = this->_avl_ptr->inorder_successor(this->_avl_ptr->root, this->_ptr);
+	this->_ptr = this->_avl_ptr->inorder_successor(this->_ptr);
 	return (*this);
 }
 
-template<class T, class AvlNode, class AvlTree>
-map_iterator<T, AvlNode, AvlTree>	map_iterator<T, AvlNode, AvlTree>::operator++(int)
+template<class T, class Node, class AvlTree>
+map_iterator<T, Node, AvlTree>	map_iterator<T, Node, AvlTree>::operator++(int)
 {
 	map_iterator	copy = *this;
 
-	this->_ptr = this->_avl_ptr->inorder_successor(this->_avl_ptr->root, this->_ptr);
+	this->_ptr = this->_avl_ptr->inorder_successor(this->_ptr);
 	return (copy);
 }
 
-template<class T, class AvlNode, class AvlTree>
-map_iterator<T, AvlNode, AvlTree>&	map_iterator<T, AvlNode, AvlTree>::operator--(void)
+template<class T, class Node, class AvlTree>
+map_iterator<T, Node, AvlTree>&	map_iterator<T, Node, AvlTree>::operator--(void)
 {
-	this->_ptr = this->_avl_ptr->inorder_predecessor(this->_avl_ptr->root, this->_ptr);
+	this->_ptr = this->_avl_ptr->inorder_predecessor(this->_ptr);
 	return (*this);
 }
 
-template<class T, class AvlNode, class AvlTree>
-map_iterator<T, AvlNode, AvlTree>	map_iterator<T, AvlNode, AvlTree>::operator--(int)
+template<class T, class Node, class AvlTree>
+map_iterator<T, Node, AvlTree>	map_iterator<T, Node, AvlTree>::operator--(int)
 {
 	map_iterator	copy = *this;
 
-	this->_ptr = this->_avl_ptr->inorder_predecessor(this->_avl_ptr->root, this->_ptr);
+	this->_ptr = this->_avl_ptr->inorder_predecessor(this->_ptr);
 	return (copy);
 }
 
@@ -92,14 +92,14 @@ map_iterator<T, AvlNode, AvlTree>	map_iterator<T, AvlNode, AvlTree>::operator--(
 /*-----------------             between iterators            -----------------*/
 /*----------------------------------------------------------------------------*/
 
-template<class T, class AvlNode, class AvlTree>
-bool	map_iterator<T, AvlNode, AvlTree>::operator==(map_iterator const & rhs) const
+template<class T, class Node, class AvlTree>
+bool	map_iterator<T, Node, AvlTree>::operator==(map_iterator const & rhs) const
 {
 	return (this->_ptr == rhs._ptr);
 }
 
-template<class T, class AvlNode, class AvlTree>
-bool	map_iterator<T, AvlNode, AvlTree>::operator!=(map_iterator const & rhs) const
+template<class T, class Node, class AvlTree>
+bool	map_iterator<T, Node, AvlTree>::operator!=(map_iterator const & rhs) const
 {
 	return (this->_ptr != rhs._ptr);
 }
@@ -109,14 +109,14 @@ bool	map_iterator<T, AvlNode, AvlTree>::operator!=(map_iterator const & rhs) con
 /*------------------              * and &                  -------------------*/
 /*----------------------------------------------------------------------------*/
 
-template<class T, class AvlNode, class AvlTree>
-typename map_iterator<T, AvlNode, AvlTree>::reference	map_iterator<T, AvlNode, AvlTree>::operator*(void) const
+template<class T, class Node, class AvlTree>
+typename map_iterator<T, Node, AvlTree>::reference	map_iterator<T, Node, AvlTree>::operator*(void) const
 {
 	return (this->_ptr->data);
 }
 
-template<class T, class AvlNode, class AvlTree>
-typename map_iterator<T, AvlNode, AvlTree>::pointer	map_iterator<T, AvlNode, AvlTree>::operator->(void) const
+template<class T, class Node, class AvlTree>
+typename map_iterator<T, Node, AvlTree>::pointer	map_iterator<T, Node, AvlTree>::operator->(void) const
 {
 	return (&(this->_ptr->data));
 }

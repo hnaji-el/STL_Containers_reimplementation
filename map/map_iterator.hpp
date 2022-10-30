@@ -3,17 +3,17 @@
 # define MAP_ITERATOR_HPP
 
 # include <cstddef>
-# include "avl_node.hpp"
+# include "node.hpp"
 
 namespace ft
 {
 
-template<class T, class AvlNode, class AvlTree>
+template<class T, class Node, class AvlTree>
 class map_iterator
 {
 private:
 	AvlTree*	_avl_ptr;
-	AvlNode*	_ptr;
+	Node*	_ptr;
 
 public:
 	//	Member types
@@ -30,10 +30,10 @@ public:
 	map_iterator&	operator=(map_iterator const & rhs);
 	~map_iterator(void);
 
-	map_iterator(AvlTree* avl_ptr, AvlNode* ptr);
+	map_iterator(AvlTree* avl_ptr, Node* ptr);
 
 	// Conversion function (make iterator convertible to const_iterator)
-	operator map_iterator<T const, AvlNode const, AvlTree const>() const;
+	operator map_iterator<T const, Node const, AvlTree const>() const;
 
 	//	Increment && Decrement operators
 	map_iterator&	operator++(void);

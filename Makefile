@@ -18,7 +18,7 @@ HEADERS_STACK = ./stack/stack.hpp
 SRC_MAP = ./map/map_tests.cpp
 HEADERS_MAP = ./map/map.hpp ./map/map.tpp \
 			  ./map/avl_tree.hpp ./map/avl_tree.tpp \
-			  ./map/avl_node.hpp ./map/avl_node.tpp \
+			  ./map/node.hpp ./map/node.tpp \
 			  ./map/map_iterator.hpp ./map/map_iterator.tpp
 
 SRC_SET = ./set/set_tests.cpp
