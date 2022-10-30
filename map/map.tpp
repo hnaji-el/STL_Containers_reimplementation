@@ -14,7 +14,7 @@ namespace ft
 
 template<class Key, class T, class Comp, class Alloc>
 map<Key, T, Comp, Alloc>::map(key_compare const & comp, allocator_type const & alloc)
-	: _avl_obj(comp), _comp(comp), _alloc(alloc)
+	: _avl_obj(comp, alloc)
 {
 }
 
@@ -22,14 +22,14 @@ template<class Key, class T, class Comp, class Alloc>
 template <class InputIterator>
 map<Key, T, Comp, Alloc>::map(InputIterator first, InputIterator last,
 								key_compare const & comp, allocator_type const & alloc)
-	: _avl_obj(comp), _comp(comp), _alloc(alloc)
+	: _avl_obj(comp, alloc)
 {
     this->insert(first, last);
 }
 
 template<class Key, class T, class Comp, class Alloc>
 map<Key, T, Comp, Alloc>::map(map const & x)
-	: _avl_obj(x.key_comp()), _comp(x.key_comp()), _alloc(x.get_allocator())
+	: _avl_obj(x.key_comp(), x.get_allocator())
 {
     this->insert(x.begin(), x.end());
 }
@@ -49,8 +49,6 @@ map<Key, T, Comp, Alloc>&	map<Key, T, Comp, Alloc>::operator=(map const & rhs)
 	if (this != &rhs)
 	{
 		this->_avl_obj = rhs._avl_obj;
-		this->_comp = rhs._comp;
-		this->_alloc = rhs._alloc;
     	this->insert(rhs.begin(), rhs.end());
 	}
     return (*this);
@@ -138,8 +136,6 @@ template<class Key, class T, class Comp, class Alloc>
 void    map<Key, T, Comp, Alloc>::swap(map& x)
 {
 	this->_avl_obj.swap(x._avl_obj);
-    std::swap(this->_comp, x._comp);
-    std::swap(this->_alloc, x._alloc);
 }
 
 template<class Key, class T, class Comp, class Alloc>
@@ -336,19 +332,19 @@ map<Key, T, Comp, Alloc>::equal_range(key_type const & k) const
 template<class Key, class T, class Comp, class Alloc>
 typename map<Key, T, Comp, Alloc>::key_compare	map<Key, T, Comp, Alloc>::key_comp(void) const
 {
-	return (this->_comp);
+	return (this->_avl_obj.get_key_compare());
 }
 
 template<class Key, class T, class Comp, class Alloc>
 typename map<Key, T, Comp, Alloc>::value_compare	map<Key, T, Comp, Alloc>::value_comp(void) const
 {
-	return (value_compare(this->_comp));
+	return (value_compare(this->key_comp()));
 }
 
 template<class Key, class T, class Comp, class Alloc>
 typename map<Key, T, Comp, Alloc>::allocator_type	map<Key, T, Comp, Alloc>::get_allocator(void) const
 {
-	return (this->_alloc);
+	return (this->_avl_obj.get_allocator());
 }
 
 /*

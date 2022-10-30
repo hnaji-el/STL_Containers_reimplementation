@@ -9,20 +9,20 @@ namespace ft
  * constructors && destructor
  */
 
-template<class T, class Comp, class NodeAlloc>
-avl_tree<T, Comp, NodeAlloc>::avl_tree(Comp const & comp)
-	: _root(), _size(), _comp(comp), _alloc(), past_the_last(), inserted_state()
+template<class T, class Comp, class Alloc>
+avl_tree<T, Comp, Alloc>::avl_tree(Comp const & comp, Alloc const & alloc)
+	: _root(), _size(), _comp(comp), _alloc(alloc), _node_alloc(), past_the_last(), inserted_state()
 {
 }
 
-template<class T, class Comp, class NodeAlloc>
-avl_tree<T, Comp, NodeAlloc>::~avl_tree(void)
+template<class T, class Comp, class Alloc>
+avl_tree<T, Comp, Alloc>::~avl_tree(void)
 {
 	this->clear_avl();
 }
 
-template<class T, class Comp, class NodeAlloc>
-avl_tree<T, Comp, NodeAlloc>&	avl_tree<T, Comp, NodeAlloc>::operator=(avl_tree const & rhs)
+template<class T, class Comp, class Alloc>
+avl_tree<T, Comp, Alloc>&	avl_tree<T, Comp, Alloc>::operator=(avl_tree const & rhs)
 {
 	if (this != &rhs)
 	{
@@ -36,14 +36,14 @@ avl_tree<T, Comp, NodeAlloc>&	avl_tree<T, Comp, NodeAlloc>::operator=(avl_tree c
  * search && clear_avl && insert && remove && swap
  */
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::search(typename T::first_type const & key) const
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::search(typename T::first_type const & key) const
 {
 	return (this->search(this->_root, key));
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::search(node<T>* root, typename T::first_type const & key) const
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::search(node<T>* root, typename T::first_type const & key) const
 {
 	if (root == NULL)
 		return (root);
@@ -55,37 +55,37 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::search(node<T>* root, typename T::first_t
 	return (root);
 }
 
-template<class T, class Comp, class NodeAlloc>
-void	avl_tree<T, Comp, NodeAlloc>::clear_avl(void)
+template<class T, class Comp, class Alloc>
+void	avl_tree<T, Comp, Alloc>::clear_avl(void)
 {
 	this->clear_avl(this->_root);
 	this->_root = NULL;
 	this->_size = 0;
 }
 
-template<class T, class Comp, class NodeAlloc>
-void	avl_tree<T, Comp, NodeAlloc>::clear_avl(node<T>* root)
+template<class T, class Comp, class Alloc>
+void	avl_tree<T, Comp, Alloc>::clear_avl(node<T>* root)
 {
 	if (root == NULL)
 		return ;
 
 	clear_avl(root->left);
 	clear_avl(root->right);
-	this->_alloc.destroy(root); this->_alloc.deallocate(root, 1);
+	this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
 }
 
-template<class T, class Comp, class NodeAlloc>
-void	avl_tree<T, Comp, NodeAlloc>::insert(T const & data)
+template<class T, class Comp, class Alloc>
+void	avl_tree<T, Comp, Alloc>::insert(T const & data)
 {
 	this->_root = this->insert(this->_root, data);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::insert(node<T>* root, T const & data)
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::insert(node<T>* root, T const & data)
 {
     if (root == NULL)
 	{
-		root = this->_alloc.allocate(1); this->_alloc.construct(root, data);
+		root = this->_node_alloc.allocate(1); this->_node_alloc.construct(root, data);
 		this->inserted_state = root;
 		this->_size++;
 		return (root);
@@ -117,14 +117,14 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::insert(node<T>* root, T const & data)
 	return (root);
 }
 
-template<class T, class Comp, class NodeAlloc>
-void	avl_tree<T, Comp, NodeAlloc>::remove(typename T::first_type const & key)
+template<class T, class Comp, class Alloc>
+void	avl_tree<T, Comp, Alloc>::remove(typename T::first_type const & key)
 {
 	this->_root = this->remove(this->_root, key);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::remove(node<T>* root, typename T::first_type const & key)
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::remove(node<T>* root, typename T::first_type const & key)
 {
 	if (root == NULL)
 		return (NULL);
@@ -135,7 +135,7 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::remove(node<T>* root, typename T::first_t
 	// case#1: leaf node
 	else if (root->left == NULL && root->right == NULL)
 	{
-		this->_alloc.destroy(root); this->_alloc.deallocate(root, 1);
+		this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
 		this->_size--;
 		return (NULL);
 	}
@@ -143,30 +143,22 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::remove(node<T>* root, typename T::first_t
 	else if (root->left == NULL)
 	{
 		node<T>*	rptr = root->right;
-		this->_alloc.destroy(root); this->_alloc.deallocate(root, 1);
+		this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
 		this->_size--;
 		root = rptr;
 	}
 	else if (root->right == NULL)
 	{
 		node<T>*	lptr = root->left;
-		this->_alloc.destroy(root); this->_alloc.deallocate(root, 1);
+		this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
 		this->_size--;
 		root = lptr;
 	}
 	// case#2: node with 2 Children
 	else if (root->left != NULL && root->right != NULL)
 	{
-		node<T>*	succ_node = this->inorder_successor(root);
-		node<T>*	temp = root;
-	
-		root = this->_alloc.allocate(1); this->_alloc.construct(root, *succ_node);
-	
-		root->left = temp->left;
-		root->right = temp->right;
-		root->height = temp->height;
-	
-		this->_alloc.destroy(temp); this->_alloc.deallocate(temp, 1);
+		this->_alloc.destroy(&root->data);
+		this->_alloc.construct(&root->data, this->inorder_successor(root)->data);
 		root->right = this->remove(root->right, root->data.first);
 	}
 	
@@ -200,8 +192,8 @@ void	avl_tree<T, Comp, Alloc>::swap(avl_tree& x)
  * Rotations for insertion and deletion
  */
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::ll_rotation(node<T>* root)
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::ll_rotation(node<T>* root)
 {
 	node<T>* lptr = root->left;
 
@@ -215,8 +207,8 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::ll_rotation(node<T>* root)
 	return (lptr);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::rr_rotation(node<T>* root)
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::rr_rotation(node<T>* root)
 {
 	node<T>* rptr = root->right;
 
@@ -230,8 +222,8 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::rr_rotation(node<T>* root)
 	return (rptr);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::lr_rotation(node<T>* root)
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::lr_rotation(node<T>* root)
 {
 	node<T>*	lptr = root->left;
 	node<T>*	lrptr = lptr->right;
@@ -249,8 +241,8 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::lr_rotation(node<T>* root)
 	return (lrptr);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::rl_rotation(node<T>* root)
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::rl_rotation(node<T>* root)
 {
 	node<T>*	rptr = root->right;
 	node<T>*	rlptr = rptr->left;
@@ -272,16 +264,16 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::rl_rotation(node<T>* root)
  * height && balance factor
  */
 
-template<class T, class Comp, class NodeAlloc>
-int	avl_tree<T, Comp, NodeAlloc>::get_height(node<T>* node) const
+template<class T, class Comp, class Alloc>
+int	avl_tree<T, Comp, Alloc>::get_height(node<T>* node) const
 {
 	if (node == NULL)
     	return (-1);
 	return (node->height);
 }
 
-template<class T, class Comp, class NodeAlloc>
-int	avl_tree<T, Comp, NodeAlloc>::height_of_node(node<T>* node) const
+template<class T, class Comp, class Alloc>
+int	avl_tree<T, Comp, Alloc>::height_of_node(node<T>* node) const
 {
 	int const	left_height = get_height(node->left);
 	int const	right_height = get_height(node->right);
@@ -289,8 +281,8 @@ int	avl_tree<T, Comp, NodeAlloc>::height_of_node(node<T>* node) const
 	return (std::max(left_height, right_height) + 1);
 }
 
-template<class T, class Comp, class NodeAlloc>
-int avl_tree<T, Comp, NodeAlloc>::get_balance_factor(node<T>* node) const
+template<class T, class Comp, class Alloc>
+int avl_tree<T, Comp, Alloc>::get_balance_factor(node<T>* node) const
 {
 	int const	left_height = get_height(node->left);
 	int const	right_height = get_height(node->right);
@@ -298,24 +290,30 @@ int avl_tree<T, Comp, NodeAlloc>::get_balance_factor(node<T>* node) const
 	return (left_height - right_height);
 }
 
-template<class T, class Comp, class NodeAlloc>
-bool	avl_tree<T, Comp, NodeAlloc>::is_equal(T const & a, T const & b) const
+template<class T, class Comp, class Alloc>
+bool	avl_tree<T, Comp, Alloc>::is_equal(T const & a, T const & b) const
 {
 	return (!this->_comp(a.first, b.first) && !this->_comp(b.first, a.first));
 }
 
 /*
- * size && is_empty
+ * size && max_size && is_empty
  */
 
-template<class T, class Comp, class NodeAlloc>
-size_t	avl_tree<T, Comp, NodeAlloc>::size(void) const
+template<class T, class Comp, class Alloc>
+size_t	avl_tree<T, Comp, Alloc>::size(void) const
 {
 	return (this->_size);
 }
 
-template<class T, class Comp, class NodeAlloc>
-bool	avl_tree<T, Comp, NodeAlloc>::is_empty(void) const
+template<class T, class Comp, class Alloc>
+size_t	avl_tree<T, Comp, Alloc>::max_size(void) const
+{
+    return (this->_alloc.max_size());
+}
+
+template<class T, class Comp, class Alloc>
+bool	avl_tree<T, Comp, Alloc>::is_empty(void) const
 {
 	return (this->_size == 0);
 }
@@ -324,8 +322,8 @@ bool	avl_tree<T, Comp, NodeAlloc>::is_empty(void) const
  * inorder_successor && inorder_predecessor
  */
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::inorder_successor(node<T> const * node) const
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::inorder_successor(node<T> const * node) const
 {
 	ft::node<T>*	ancestor = this->_root;
 	ft::node<T>*	successor = NULL;
@@ -350,8 +348,8 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::inorder_successor(node<T> const * node) c
 	return ((successor == NULL) ? (ft::node<T>*)(&this->past_the_last) : successor);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::inorder_predecessor(node<T> const * node) const
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::inorder_predecessor(node<T> const * node) const
 {
 	ft::node<T>*	ancestor = this->_root;
 	ft::node<T>*	predecessor = NULL;
@@ -382,8 +380,8 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::inorder_predecessor(node<T> const * node)
  * lower_bound && upper_bound
  */
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::lower_bound(typename T::first_type const & key) const
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::lower_bound(typename T::first_type const & key) const
 {
 	node<T>*	temp = this->_root;
 	node<T>*	lower_bound = NULL;
@@ -429,20 +427,20 @@ node<T>*	avl_tree<T, Comp, Alloc>::upper_bound(typename T::first_type const & ke
  * leftmost_node && rightmost_node
  */
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::rightmost_node(void) const
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::rightmost_node(void) const
 {
 	return (this->rightmost_node(this->_root));
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::leftmost_node(void) const
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::leftmost_node(void) const
 {
 	return (this->leftmost_node(this->_root));
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::rightmost_node(node<T>* root) const
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::rightmost_node(node<T>* root) const
 {
    if (root == NULL)
        return (NULL);
@@ -452,8 +450,8 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::rightmost_node(node<T>* root) const
    return (root);
 }
 
-template<class T, class Comp, class NodeAlloc>
-node<T>*	avl_tree<T, Comp, NodeAlloc>::leftmost_node(node<T>* root) const
+template<class T, class Comp, class Alloc>
+node<T>*	avl_tree<T, Comp, Alloc>::leftmost_node(node<T>* root) const
 {
     if (root == NULL)
         return (NULL);
@@ -461,7 +459,24 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::leftmost_node(node<T>* root) const
     while (root->left != NULL)
         root = root->left;
     return (root);
+} 
+
+/*
+ * getters [ get_key_compare && get_allocator ]
+ */
+
+template<class T, class Comp, class Alloc>
+Comp	avl_tree<T, Comp, Alloc>::get_key_compare(void) const
+{
+	return (this->_comp);
 }
+
+template<class T, class Comp, class Alloc>
+Alloc	avl_tree<T, Comp, Alloc>::get_allocator(void) const
+{
+	return (this->_alloc);
+}
+
 
 }
 

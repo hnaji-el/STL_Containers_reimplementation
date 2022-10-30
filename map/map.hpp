@@ -14,6 +14,7 @@
 # include <iostream>
 # include <algorithm>
 # include <functional>
+# include <cstddef>
 
 namespace ft
 {
@@ -25,6 +26,13 @@ template<class Key,                                          // map::key_type
          >
 class map
 {
+private:
+	typedef avl_tree<pair<Key const, T>, Compare, Alloc>	avl_tree_t;
+
+private:
+	// Data members:
+	avl_tree_t	_avl_obj;
+
 public:
 	// Member types:
 	typedef Key		key_type;
@@ -36,27 +44,23 @@ public:
 	typedef typename allocator_type::const_reference	const_reference;
 	typedef typename allocator_type::pointer			pointer;
 	typedef typename allocator_type::const_pointer		const_pointer;
-private:
-	typedef typename allocator_type::template rebind<node<value_type> >::other	node_allocator;
-	typedef avl_tree<value_type, key_compare,  node_allocator> avl_tree;
 public:
-	typedef ft::map_iterator<value_type, node<value_type>, avl_tree>    iterator;
-	typedef ft::map_iterator<value_type const, node<value_type> const, avl_tree const>  const_iterator;
+	typedef ft::map_iterator<value_type      , node<value_type>      , avl_tree_t      >	iterator;
+	typedef ft::map_iterator<value_type const, node<value_type> const, avl_tree_t const>	const_iterator;
 	typedef ft::reverse_iterator<iterator>      reverse_iterator;
 	typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
-	typedef typename iterator_traits<iterator>::difference_type	difference_type;
-	typedef size_t	size_type;
+	typedef ptrdiff_t	difference_type;
+	typedef size_t		size_type;
 	////
 	class value_compare : std::binary_function<value_type, value_type, bool>
 	{
 		friend class map;
 	protected:
 		Compare	comp;
-	
+
 		value_compare(Compare c) : comp(c) { } // constructed with map's comparison object
 	public:
-		bool	operator()(value_type const & x, value_type const & y) const
-		{
+		bool	operator()(value_type const & x, value_type const & y) const {
 			return (comp(x.first, y.first));
 		}
 	};
@@ -127,12 +131,6 @@ public:
 	key_compare		key_comp(void) const;
 	value_compare	value_comp(void) const;
 	allocator_type	get_allocator(void) const;
-
-private:
-	// Data members:
-	avl_tree		_avl_obj;
-	key_compare		_comp;
-	allocator_type	_alloc;
 };
 
 // swap
