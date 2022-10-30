@@ -122,34 +122,6 @@ node<T>*	rb_tree<T, Comp, Alloc>::insert(node<T>* root, T const & key)
 	return (fix_up(root));
 }
 
-template<class T, class Comp, class NodeAlloc>
-void	rb_tree<T, Comp, NodeAlloc>::remove_minimum(void)
-{
-	this->root = this->remove_minimum(this->root);
-	if (this->size > 0)
-		this->root->color = BLACK;
-}
-
-template<class T, class Comp, class NodeAlloc>
-node<T>*	rb_tree<T, Comp, NodeAlloc>::remove_minimum(node<T>* root)
-{
-	// delete the minimum node
-	if (root->left == NULL)
-	{
- 		this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
- 		this->_size--;
-		return (NULL);
-	}
-
-	// Transformations on the way-down the search path
-	if (root->left && !is_red(root->left) && !is_red(root->left->left))
-		root = move_red_to_left(root);
-	root->left = remove_minimum(root->left);
-
-	// Transformations on the way-up the search path
-	return (fix_up(root));
-}
-
 template<class T, class Comp, class Alloc>
 void	rb_tree<T, Comp, Alloc>::remove(T const & key)
 {
@@ -163,84 +135,37 @@ node<T>*	rb_tree<T, Comp, Alloc>::remove(node<T>* root, T const & key)
 {
 	if (root == NULL)
 		return (NULL);
-
+	
 	if (this->_comp(key, root->key) == true) // move to left
 	{
-		if (root->left && !is_red(root->left) && !is_red(root->left->left))
-			root = move_red_to_left(root);
+		if (root->left && !this->is_red(root->left) && !this->is_red(root->left->left))
+			root = this->move_red_to_left(root);
 		root->left = this->remove(root->left, key);
 	}
 	else // [ move to righ, remove ]
 	{
-		if (is_red(root->left))
-			root = right_rotation(root);
+		if (this->is_red(root->left))
+			root = this->right_rotation(root);
 		if ((!this->_comp(key, root->key)) && (!this->_comp(root->key, key)) && (root->right == NULL))
- 		{
- 			this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
- 			this->_size--;
- 			return (NULL);
- 		}
-		if (root->right && !is_red(root->right) && !is_red(root->right->left))
-    		root = move_red_to_right(root);
+		{
+			this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
+			this->_size--;
+			return (NULL);
+		}
+		if (root->right && !this->is_red(root->right) && !this->is_red(root->right->left))
+			root = this->move_red_to_right(root);
 		if ((!this->_comp(key, root->key)) && (!this->_comp(root->key, key)))
-    	{
- 			this->_alloc.destroy(&root->key);
- 			this->_alloc.construct(&root->key, this->inorder_successor(root)->key);
-			root->right = this->remove_minimum(root->right);
-    	}
-		else root->right = remove(root->right, key);
+		{
+			this->_alloc.destroy(&root->key);
+			this->_alloc.construct(&root->key, this->inorder_successor(root)->key);
+			root->right = this->remove(root->right, root->key);
+		}
+		else
+			root->right = this->remove(root->right, key);
 	}
 	// transformations on the way-up the search path to maintain invariants.
-	return (fix_up(root));
+	return (this->fix_up(root));
 }
-
-// template<class T, class Comp, class Alloc>
-// node<T>*	rb_tree<T, Comp, Alloc>::remove(node<T>* root, T const & key)
-// {
-// 	if (root == NULL)
-// 		return (NULL);
-// 
-// 	if (this->_comp(key, root->key) == true) // move to left
-// 	{
-// 		if (root->left && !is_red(root->left) && !is_red(root->left->left))
-// 			root = move_red_to_left(root);
-// 		root->left = this->remove(root->left, key);
-// 	}
-// 	else if (this->_comp(root->key, key) == true) // move to right
-// 	{
-// 		if (is_red(root->left))
-// 			root = right_rotation(root);
-// 		if (root->right && !is_red(root->right) && !is_red(root->right->left))
-// 			root = move_red_to_right(root);
-// 		root->right = this->remove(root->right, key);
-// 	}
-// 	else
-// 	{
-// 		if (root->left == NULL && root->right == NULL) // leaf node
-// 		{
-// 			this->_node_alloc.destroy(root); this->_node_alloc.deallocate(root, 1);
-// 			this->_size--;
-// 			return (NULL);
-// 		}
-// 		else if (root->left != NULL && root->right == NULL) // node has one child on the left-subtree
-// 		{
-// 			root = this->right_rotation(root);
-// 			root->right = this->remove(root->right, key);
-// 		}
-// 		else if (root->left != NULL && root->right != NULL) // internal node
-// 		{
-// 			this->_alloc.destroy(&root->key);
-// 			this->_alloc.construct(&root->key, this->inorder_successor(root)->key);
-// 
-// 			if (!is_red(root->right) && !is_red(root->right->left))
-// 				root = move_red_to_right(root);
-// 			root->right = this->remove(root->right, root->key);
-// 		}
-// 	}
-// 	// transformations on the way-up the search path to maintain invariants.
-// 	return (fix_up(root));
-// }
-
 
 /*
  * Helper member functions for remove operation
@@ -264,6 +189,7 @@ template<class T, class Comp, class Alloc>
 node<T>*	rb_tree<T, Comp, Alloc>::move_red_to_right(node<T>* node)
 {
 	// if right-child of a node is a 2-node: node->right && node->right->left are blacks.
+
 	color_flip(node);
 	if (is_red(node->left->left))
 	{

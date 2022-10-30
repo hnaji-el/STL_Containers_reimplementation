@@ -34,10 +34,7 @@ public:
 	rb_tree(rb_tree const & src);
 	rb_tree&	operator=(rb_tree const & rhs);
 	~rb_tree(void);
-		void		remove_minimum(void);
-	node<T>*	remove_minimum(node<T>* root);
 
-	
 	// search, insert and remove operations of red-black tree
 	node<T>*	search(T const & key) const;
 	void	insert(T const & key);
