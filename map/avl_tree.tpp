@@ -11,7 +11,7 @@ namespace ft
 
 template<class T, class Comp, class NodeAlloc>
 avl_tree<T, Comp, NodeAlloc>::avl_tree(Comp const & comp)
-	: root(), _size(), comp(comp), alloc(), past_the_last(), inserted_state()
+	: _root(), _size(), _comp(comp), _alloc(), past_the_last(), inserted_state()
 {
 }
 
@@ -27,7 +27,7 @@ avl_tree<T, Comp, NodeAlloc>&	avl_tree<T, Comp, NodeAlloc>::operator=(avl_tree c
 	if (this != &rhs)
 	{
 		this->clear_avl();
-		this->comp = rhs.comp;
+		this->_comp = rhs._comp;
 	}
 	return (*this);
 }
@@ -39,7 +39,7 @@ avl_tree<T, Comp, NodeAlloc>&	avl_tree<T, Comp, NodeAlloc>::operator=(avl_tree c
 template<class T, class Comp, class NodeAlloc>
 node<T>*	avl_tree<T, Comp, NodeAlloc>::search(typename T::first_type const & key) const
 {
-	return (this->search(this->root, key));
+	return (this->search(this->_root, key));
 }
 
 template<class T, class Comp, class NodeAlloc>
@@ -48,9 +48,9 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::search(node<T>* root, typename T::first_t
 	if (root == NULL)
 		return (root);
 
-	else if (this->comp(key, root->data.first) == true) // move to left
+	else if (this->_comp(key, root->data.first) == true) // move to left
 		return (this->search(root->left, key));
-	else if (this->comp(root->data.first, key) == true) // move to right
+	else if (this->_comp(root->data.first, key) == true) // move to right
 		return (this->search(root->right, key));
 	return (root);
 }
@@ -58,8 +58,8 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::search(node<T>* root, typename T::first_t
 template<class T, class Comp, class NodeAlloc>
 void	avl_tree<T, Comp, NodeAlloc>::clear_avl(void)
 {
-	this->clear_avl(this->root);
-	this->root = NULL;
+	this->clear_avl(this->_root);
+	this->_root = NULL;
 	this->_size = 0;
 }
 
@@ -71,13 +71,13 @@ void	avl_tree<T, Comp, NodeAlloc>::clear_avl(node<T>* root)
 
 	clear_avl(root->left);
 	clear_avl(root->right);
-	this->alloc.destroy(root); this->alloc.deallocate(root, 1);
+	this->_alloc.destroy(root); this->_alloc.deallocate(root, 1);
 }
 
 template<class T, class Comp, class NodeAlloc>
 void	avl_tree<T, Comp, NodeAlloc>::insert(T const & data)
 {
-	this->root = this->insert(this->root, data);
+	this->_root = this->insert(this->_root, data);
 }
 
 template<class T, class Comp, class NodeAlloc>
@@ -85,14 +85,14 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::insert(node<T>* root, T const & data)
 {
     if (root == NULL)
 	{
-		root = this->alloc.allocate(1); this->alloc.construct(root, data);
+		root = this->_alloc.allocate(1); this->_alloc.construct(root, data);
 		this->inserted_state = root;
 		this->_size++;
 		return (root);
 	}
-    else if (this->comp(data.first, root->data.first) == true) // move to left
+    else if (this->_comp(data.first, root->data.first) == true) // move to left
 		root->left = this->insert(root->left, data);
-    else if (this->comp(root->data.first, data.first) == true) // move to right
+    else if (this->_comp(root->data.first, data.first) == true) // move to right
 		root->right = this->insert(root->right, data);
     else if (this->is_equal(data, root->data) == true)
     {
@@ -120,7 +120,7 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::insert(node<T>* root, T const & data)
 template<class T, class Comp, class NodeAlloc>
 void	avl_tree<T, Comp, NodeAlloc>::remove(typename T::first_type const & key)
 {
-	this->root = this->remove(this->root, key);
+	this->_root = this->remove(this->_root, key);
 }
 
 template<class T, class Comp, class NodeAlloc>
@@ -128,14 +128,14 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::remove(node<T>* root, typename T::first_t
 {
 	if (root == NULL)
 		return (NULL);
-	else if (this->comp(key, root->data.first) == true) // move to left
+	else if (this->_comp(key, root->data.first) == true) // move to left
 		root->left = remove(root->left, key);
-	else if (this->comp(root->data.first, key) == true) // move to right
+	else if (this->_comp(root->data.first, key) == true) // move to right
 		root->right = remove(root->right, key);
 	// case#1: leaf node
 	else if (root->left == NULL && root->right == NULL)
 	{
-		this->alloc.destroy(root); this->alloc.deallocate(root, 1);
+		this->_alloc.destroy(root); this->_alloc.deallocate(root, 1);
 		this->_size--;
 		return (NULL);
 	}
@@ -143,14 +143,14 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::remove(node<T>* root, typename T::first_t
 	else if (root->left == NULL)
 	{
 		node<T>*	rptr = root->right;
-		this->alloc.destroy(root); this->alloc.deallocate(root, 1);
+		this->_alloc.destroy(root); this->_alloc.deallocate(root, 1);
 		this->_size--;
 		root = rptr;
 	}
 	else if (root->right == NULL)
 	{
 		node<T>*	lptr = root->left;
-		this->alloc.destroy(root); this->alloc.deallocate(root, 1);
+		this->_alloc.destroy(root); this->_alloc.deallocate(root, 1);
 		this->_size--;
 		root = lptr;
 	}
@@ -160,13 +160,13 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::remove(node<T>* root, typename T::first_t
 		node<T>*	succ_node = this->inorder_successor(root);
 		node<T>*	temp = root;
 	
-		root = this->alloc.allocate(1); this->alloc.construct(root, *succ_node);
+		root = this->_alloc.allocate(1); this->_alloc.construct(root, *succ_node);
 	
 		root->left = temp->left;
 		root->right = temp->right;
 		root->height = temp->height;
 	
-		this->alloc.destroy(temp); this->alloc.deallocate(temp, 1);
+		this->_alloc.destroy(temp); this->_alloc.deallocate(temp, 1);
 		root->right = this->remove(root->right, root->data.first);
 	}
 	
@@ -190,10 +190,10 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::remove(node<T>* root, typename T::first_t
 template<class T, class Comp, class Alloc>
 void	avl_tree<T, Comp, Alloc>::swap(avl_tree& x)
 {
-	std::swap(this->root, x.root);
+	std::swap(this->_root, x._root);
 	std::swap(this->_size, x._size);
-	std::swap(this->comp, x.comp);
-	std::swap(this->alloc, x.alloc);
+	std::swap(this->_comp, x._comp);
+	std::swap(this->_alloc, x._alloc);
 }
 
 /*
@@ -301,7 +301,7 @@ int avl_tree<T, Comp, NodeAlloc>::get_balance_factor(node<T>* node) const
 template<class T, class Comp, class NodeAlloc>
 bool	avl_tree<T, Comp, NodeAlloc>::is_equal(T const & a, T const & b) const
 {
-	return (!this->comp(a.first, b.first) && !this->comp(b.first, a.first));
+	return (!this->_comp(a.first, b.first) && !this->_comp(b.first, a.first));
 }
 
 /*
@@ -327,10 +327,10 @@ bool	avl_tree<T, Comp, NodeAlloc>::is_empty(void) const
 template<class T, class Comp, class NodeAlloc>
 node<T>*	avl_tree<T, Comp, NodeAlloc>::inorder_successor(node<T> const * node) const
 {
-	ft::node<T>*	ancestor = this->root;
+	ft::node<T>*	ancestor = this->_root;
 	ft::node<T>*	successor = NULL;
 
-	if (this->root == NULL || node == NULL || node == &this->past_the_last)
+	if (this->_root == NULL || node == NULL || node == &this->past_the_last)
 		return (NULL);
 
 	// case1: node has right-subtree
@@ -339,7 +339,7 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::inorder_successor(node<T> const * node) c
 	// case2: no right-subtree
 	while (ancestor != node)
 	{
-		if (this->comp(node->data.first, ancestor->data.first) == true)
+		if (this->_comp(node->data.first, ancestor->data.first) == true)
 		{
 			successor = ancestor;
 			ancestor = ancestor->left;
@@ -353,10 +353,10 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::inorder_successor(node<T> const * node) c
 template<class T, class Comp, class NodeAlloc>
 node<T>*	avl_tree<T, Comp, NodeAlloc>::inorder_predecessor(node<T> const * node) const
 {
-	ft::node<T>*	ancestor = this->root;
+	ft::node<T>*	ancestor = this->_root;
 	ft::node<T>*	predecessor = NULL;
 
-	if (this->root == NULL || node == NULL)
+	if (this->_root == NULL || node == NULL)
 		return (NULL);
     if (node == &this->past_the_last)
         return (this->rightmost_node(ancestor));
@@ -367,7 +367,7 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::inorder_predecessor(node<T> const * node)
 	// case2: no left-subtree
 	while (ancestor != node)
 	{
-		if (this->comp(ancestor->data.first, node->data.first) == true)
+		if (this->_comp(ancestor->data.first, node->data.first) == true)
 		{
 			predecessor = ancestor;
 			ancestor = ancestor->right;
@@ -385,17 +385,17 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::inorder_predecessor(node<T> const * node)
 template<class T, class Comp, class NodeAlloc>
 node<T>*	avl_tree<T, Comp, NodeAlloc>::lower_bound(typename T::first_type const & key) const
 {
-	node<T>*	temp = this->root;
+	node<T>*	temp = this->_root;
 	node<T>*	lower_bound = NULL;
 
 	while (temp != NULL)
 	{
-		if (!this->comp(temp->data.first, key) && !this->comp(key, temp->data.first))
+		if (!this->_comp(temp->data.first, key) && !this->_comp(key, temp->data.first))
 		{
 			lower_bound = temp;
 			break ;
 		}
-		if (this->comp(key, temp->data.first) == true) // move to left
+		if (this->_comp(key, temp->data.first) == true) // move to left
 		{
 			lower_bound = temp;
 			temp = temp->left;
@@ -409,12 +409,12 @@ node<T>*	avl_tree<T, Comp, NodeAlloc>::lower_bound(typename T::first_type const 
 template<class T, class Comp, class Alloc>
 node<T>*	avl_tree<T, Comp, Alloc>::upper_bound(typename T::first_type const & key) const
 {
-	node<T>*	temp = this->root;
+	node<T>*	temp = this->_root;
 	node<T>*	upper_bound = NULL;
 
 	while (temp != NULL)
 	{
-		if (this->comp(key, temp->data.first) == true) // move to left
+		if (this->_comp(key, temp->data.first) == true) // move to left
 		{
 			upper_bound = temp;
 			temp = temp->left;
@@ -432,13 +432,13 @@ node<T>*	avl_tree<T, Comp, Alloc>::upper_bound(typename T::first_type const & ke
 template<class T, class Comp, class NodeAlloc>
 node<T>*	avl_tree<T, Comp, NodeAlloc>::rightmost_node(void) const
 {
-	return (this->rightmost_node(this->root));
+	return (this->rightmost_node(this->_root));
 }
 
 template<class T, class Comp, class NodeAlloc>
 node<T>*	avl_tree<T, Comp, NodeAlloc>::leftmost_node(void) const
 {
-	return (this->leftmost_node(this->root));
+	return (this->leftmost_node(this->_root));
 }
 
 template<class T, class Comp, class NodeAlloc>

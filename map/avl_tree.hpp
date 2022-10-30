@@ -17,10 +17,10 @@ template<class T, class Compare, class NodeAlloc>
 class avl_tree
 {
 private:
-	node<T>*	root;
+	node<T>*	_root;
 	size_t		_size;
-	Compare		comp;
-	NodeAlloc	alloc;
+	Compare		_comp;
+	NodeAlloc	_alloc;
 public:
 	node<T>		past_the_last;
 	node<T>*	inserted_state;
