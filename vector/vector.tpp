@@ -257,7 +257,7 @@ void	vector<T, Alloc>::insert(iterator position, InputIterator first, InputItera
  */
 
 template<class T, class Alloc>
-typename vector<T, Alloc>::iterator vector<T, Alloc>::erase_def_(size_type const pos_index, size_type n)
+typename vector<T, Alloc>::iterator vector<T, Alloc>::erase_def_(const size_type pos_index, const size_type n)
 {
 	for (size_type index = pos_index; index < this->_size; ++index)
 	{
@@ -270,9 +270,9 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::erase_def_(size_type const
 }
 
 template<class T, class Alloc>
-typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator position)
+typename vector<T, Alloc>::iterator	vector<T, Alloc>::erase(iterator position)
 {
-	size_type const pos_index = position - this->begin();
+	const size_type		pos_index = position - this->begin();
 	
 	return (erase_def_(pos_index, 1));
 }
@@ -280,9 +280,9 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator position)
 template<class T, class Alloc>
 typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last)
 {
-	size_type	n = last - first;
-	size_type const pos_index = first - this->begin();
-	
+	const size_type		n = last - first;
+	const size_type		pos_index = first - this->begin();
+
 	return (erase_def_(pos_index, n));
 }
 
@@ -293,22 +293,14 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iter
 template<class T, class Alloc>
 void	vector<T, Alloc>::push_back(value_type const & val)
 {
-	pointer temp = NULL;
-	
-	if (this->_size == this->_capacity)
+	if (this->_size == 0)
 	{
-		this->_capacity = (this->_capacity == 0) ? 1: this->_capacity * 2;
-		temp = this->_alloc.allocate(this->_capacity);
-		for (size_type i = 0; i < this->_size; i++)
-		{
-			this->_alloc.construct(temp + i, *(this->_array + i));
-			this->_alloc.destroy(this->_array + i);
-		}
-		this->_alloc.deallocate(this->_array, this->_size);
-		this->_array = temp;
+		this->_size = this->_capacity = 1;
+		this->_array = this->_alloc.allocate(this->_size);
+		this->_alloc.construct(this->_array, val);
 	}
-	this->_alloc.construct(this->_array + this->_size, val);
-	this->_size++;
+	else
+		this->insert(this->end(), val);
 }
 
 template<class T, class Alloc>
@@ -316,8 +308,8 @@ void	vector<T, Alloc>::pop_back(void)
 {
 	if (this->_size == 0)
 		return ;
-	this->_alloc.destroy(this->_array + this->_size);
 	this->_size--;
+	this->_alloc.destroy(this->_array + this->_size);
 }
 
 /*
@@ -388,7 +380,7 @@ void	vector<T, Alloc>::resize(size_type n, value_type val)
 	{
 		for (; n < this->_size; this->_size--)
 			this->_alloc.destroy(this->_array + this->_size - 1);
-	    return ;
+		return ;
 	}
 	
 	if (n <= this->_capacity)
