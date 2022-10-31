@@ -38,66 +38,66 @@ public:
 	typedef typename allocator_type::const_reference	const_reference;
 	typedef typename allocator_type::pointer			pointer;
 	typedef typename allocator_type::const_pointer		const_pointer;
-	typedef ptrdiff_t									difference_type;
-	typedef size_t										size_type;
-	typedef ft::vector_iterator<T>						iterator;
-	typedef ft::vector_iterator<T const>				const_iterator;
-	typedef ft::reverse_iterator<iterator>				reverse_iterator;
-	typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+	typedef ptrdiff_t								difference_type;
+	typedef size_t									size_type;
+	typedef ft::vector_iterator<T>					iterator;
+	typedef ft::vector_iterator<T const>			const_iterator;
+	typedef ft::reverse_iterator<iterator>			reverse_iterator;
+	typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 public:
 	// 	Constructors && Destructor
 	explicit vector(const allocator_type& alloc = allocator_type());
 	explicit vector(size_type n,
-					const value_type& val = value_type(),
-					const allocator_type& alloc = allocator_type() );
-    template <class InputIterator>
-        vector(InputIterator first, InputIterator last,
-               allocator_type const & alloc = allocator_type(),
-               typename ft::enable_if<!(ft::is_integral<InputIterator>::value)>::type* = NULL);
-    vector (vector const & x);
+					value_type const & val = value_type(),
+					allocator_type const & alloc = allocator_type());
+	template <class InputIterator>
+		vector(InputIterator first, InputIterator last,
+				allocator_type const & alloc = allocator_type(),
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = NULL);
+	vector(vector const & x);
 	~vector(void);
 
     // Copy assignment operator
-    vector& operator=(vector const & x);
-
-    //	Iterators:
+	vector&	operator=(vector const & x);
+	
+	//	Iterators:
 	iterator 		begin(void);
 	const_iterator	begin(void) const;
 	iterator		end(void);
 	const_iterator	end(void) const;
-    reverse_iterator    rbegin(void);
-    const_reverse_iterator  rbegin(void) const;
-    reverse_iterator    rend(void);
-    const_reverse_iterator  rend(void) const;
-
-    // Modifiers: [ assign && insert && erase && push_back && pop_back && swap && clear ]
-    template<class InputIterator>
-        void    assign(InputIterator first, InputIterator last, typename ft::enable_if<!(ft::is_integral<InputIterator>::value)>::type* = NULL);
-    void    assign(size_type n, value_type const & val);
-
-    iterator    insert(iterator position, value_type const & val);
-    void    insert(iterator position, size_type n, value_type const & val);
-    template <class InputIterator>
-            void    insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!(ft::is_integral<InputIterator>::value)>::type* = NULL);
-
-    iterator    erase(iterator position);
-    iterator    erase(iterator first, iterator last);
-
-    void    push_back(value_type const & val);
-    void    pop_back(void);
-
-    void    swap(vector& x);
-    void    clear(void);
-
-    //	Capacity:
+	reverse_iterator    rbegin(void);
+	const_reverse_iterator  rbegin(void) const;
+	reverse_iterator    rend(void);
+	const_reverse_iterator  rend(void) const;
+	
+	// Modifiers: [ assign && insert && erase && push_back && pop_back && swap && clear ]
+	template<class InputIterator>
+	    void    assign(InputIterator first, InputIterator last, typename ft::enable_if<!(ft::is_integral<InputIterator>::value)>::type* = NULL);
+	void    assign(size_type n, value_type const & val);
+	
+	iterator    insert(iterator position, value_type const & val);
+	void    insert(iterator position, size_type n, value_type const & val);
+	template <class InputIterator>
+	        void    insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!(ft::is_integral<InputIterator>::value)>::type* = NULL);
+	
+	iterator    erase(iterator position);
+	iterator    erase(iterator first, iterator last);
+	
+	void    push_back(value_type const & val);
+	void    pop_back(void);
+	
+	void    swap(vector& x);
+	void    clear(void);
+	
+	//	Capacity:
 	size_type	size(void) const;
 	size_type 	max_size(void) const;
-    size_type 	capacity(void) const;
-    bool 		empty(void) const;
+	size_type 	capacity(void) const;
+	bool 		empty(void) const;
 	void 		resize(size_type n, value_type val = value_type());
 	void 		reserve(size_type n); /* Throw exception [std::length_error, std::bad_alloc] */
-
+	
 	// 	Element access:
 	reference 		operator[](size_type n);
 	const_reference operator[](size_type n) const;
@@ -107,9 +107,9 @@ public:
 	const_reference	front(void) const;
 	reference 		back(void);
 	const_reference	back(void) const;
-
-    // Allocator:
-    allocator_type  get_allocator(void) const;
+	
+	// Allocator:
+	allocator_type  get_allocator(void) const;
 
 private:
     // Helper member functions:

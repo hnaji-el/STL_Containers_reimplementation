@@ -11,39 +11,43 @@ namespace ft
 
 template<class T, class Alloc>
 vector<T, Alloc>::vector(allocator_type const & alloc)
-	: _array(NULL), _alloc(alloc), _size(0), _capacity(0)
+	: _array(), _alloc(alloc), _size(), _capacity()
 {
 }
 
 template<class T, class Alloc>
-vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator_type& alloc)
-	: _array(NULL), _alloc(alloc), _size(n), _capacity(n)
+vector<T, Alloc>::vector(size_type n, value_type const & val, const allocator_type& alloc)
+	: _array(), _alloc(alloc), _size(n), _capacity(n)
 {
 	this->_array = this->_alloc.allocate(n);
-	for (size_type i = 0; i < n; i++)
+	for (size_type i = 0; i < n; i++) {
 		this->_alloc.construct(this->_array + i, val);
+	}
 }
 
 template<class T, class Alloc>
 template <class InputIterator>
 vector<T, Alloc>::vector(InputIterator first, InputIterator last,
-                         allocator_type const & alloc,
-                         typename ft::enable_if<!(ft::is_integral<InputIterator>::value)>::type*) : _alloc(alloc)
+						allocator_type const & alloc,
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type*)
+	: _array(), _alloc(alloc), _size(), _capacity()
 {
-    this->_size = this->_capacity = std::distance(first, last);
-    this->_array = this->_alloc.allocate(this->_capacity);
+	this->_size = this->_capacity = std::distance(first, last);
 
-    for (size_type i = 0; first != last; ++first, ++i)
-        this->_alloc.construct(this->_array + i, *first);
+	this->_array = this->_alloc.allocate(this->_capacity);
+	for (size_type i = 0; first != last; ++first, ++i) {
+		this->_alloc.construct(this->_array + i, *first);
+	}
 }
 
 template<class T, class Alloc>
-vector<T, Alloc>::vector(vector const & x) : _alloc(x._alloc), _size(x._size), _capacity(x._capacity)
+vector<T, Alloc>::vector(vector const & x)
+	: _array(), _alloc(x._alloc), _size(x._size), _capacity(x._size)
 {
-    this->_array = this->_alloc.allocate(this->_capacity);
-
-    for (size_type i = 0; i < this->_size; i++)
-        this->_alloc.construct(this->_array + i, *(x._array + i));
+	this->_array = this->_alloc.allocate(this->_size);
+	for (size_type i = 0; i < this->_size; i++) {
+		this->_alloc.construct(this->_array + i, *(x._array + i));
+	}
 }
 
 template<class T, class Alloc>
@@ -51,7 +55,6 @@ vector<T, Alloc>::~vector(void)
 {
 	for (size_type	i = 0; i < this->_size; i++)
 		this->_alloc.destroy(this->_array + i);
-
 	this->_alloc.deallocate(this->_array, this->_capacity);
 }
 
@@ -60,21 +63,20 @@ vector<T, Alloc>::~vector(void)
  */
 
 template<class T, class Alloc>
-vector<T, Alloc>&   vector<T, Alloc>::operator=(vector const & x)
+vector<T, Alloc>&	vector<T, Alloc>::operator=(vector const & x)
 {
-    this->clear();
-    this->_alloc.deallocate(this->_array, this->_capacity);
+	this->clear();
+	this->_alloc.deallocate(this->_array, this->_capacity);
 
-    this->_size = x._size;
-    this->_capacity = x._capacity;
-    this->_array = this->_alloc.allocate(x._size);
+	this->_size = this->_capacity = x._size;
+	this->_array = this->_alloc.allocate(this->_size);
 
-    for (size_type i = 0; i < this->_size; i++)
-        this->_alloc.construct(this->_array + i, *(x._array + i));
+	for (size_type i = 0; i < this->_size; i++) {
+		this->_alloc.construct(this->_array + i, *(x._array + i));
+	}
 
-    return (*this);
+	return (*this);
 }
-
 
 /*
  * Iterators:
