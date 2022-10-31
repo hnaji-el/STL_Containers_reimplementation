@@ -119,7 +119,7 @@ public:
 
 private:
 	// Helper member functions:
-	iterator	insert_def_(iterator position, size_type n, value_type const & val);
+	void		make_places_to_new_elements(size_type const pos_index, size_type const n);
 	iterator	erase_def_(size_type const pos_index, size_type n);
 	size_type	get_new_capacity(size_type n);
 };

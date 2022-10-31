@@ -183,107 +183,73 @@ void	vector<T, Alloc>::assign(size_type n, value_type const & val)
  */
 
 template<class T, class Alloc>
-typename vector<T, Alloc>::iterator vector<T, Alloc>::insert_def_(iterator position, size_type n, value_type const & val)
+void	vector<T, Alloc>::make_places_to_new_elements(const size_type pos_index, const size_type n)
 {
-	size_type	new_capacity;
-	pointer		new_array;
-	difference_type const pos_index  = position - this->begin();
-	
-	// case1: no reallocation
+	// case1: without reallocation
 	if ((this->_capacity - this->_size) >= n)
 	{
-	    for(long index = this->_size - 1; index >= pos_index; index--)
-	    {
+	    for(long index = this->_size - 1; index >= (long)pos_index; index--)
+		{
 	    	this->_alloc.construct(this->_array + index + n, *(this->_array + index));
 	    	this->_alloc.destroy(this->_array + index);
 	    }
-	    for(size_type index = 0; index < n; index++)
-	    	this->_alloc.construct(this->_array + pos_index + index, val);
-	    this->_size += n;
-	    return (position);
 	}
-	
 	// case2: with reallocation
-	new_capacity = get_new_capacity(this->_size + n);
-	new_array = this->_alloc.allocate(new_capacity);
-
-	for (size_type index = 0; index < (size_type)pos_index; index++)
+	else
 	{
-		this->_alloc.construct(new_array + index, *(this->_array + index));
-		this->_alloc.destroy(this->_array + index);
+		size_type	new_capacity = this->get_new_capacity(this->_size + n);
+		pointer		new_array = this->_alloc.allocate(new_capacity);
+		
+		for (size_type i = 0; i < pos_index; i++)
+		{
+			this->_alloc.construct(new_array + i, *(this->_array + i));
+			this->_alloc.destroy(this->_array + i);
+		}
+		for(size_type i = pos_index; i < this->_size; i++)
+		{
+			this->_alloc.construct(new_array + i + n, *(this->_array + i));
+			this->_alloc.destroy(this->_array + i);
+		}
+		this->_alloc.deallocate(this->_array, this->_capacity);
+		this->_array = new_array;
+		this->_capacity = new_capacity;
 	}
-	for(size_type index = 0; index < n; index++)
-		this->_alloc.construct(new_array + index + pos_index, val);
-	for(size_type index = pos_index; index < this->_size; index++)
-	{
-		this->_alloc.construct(new_array + index + n, *(this->_array + index));
-		this->_alloc.destroy(this->_array + index);
-	}
-	
-	this->_alloc.deallocate(this->_array, this->_capacity);
-	this->_array = new_array;
-	this->_capacity = new_capacity;
 	this->_size += n;
-	return (this->begin() + pos_index);
 }
 
 template<class T, class Alloc>
 typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, value_type const & val)
 {
-	return (this->insert_def_(position,1, val));
+	const size_type		pos_index = position - this->begin();
+
+	this->make_places_to_new_elements(pos_index, 1);
+	this->_alloc.construct(this->_array + pos_index, val);
+	return (this->begin() + pos_index);
 }
 
 template<class T, class Alloc>
 void	vector<T, Alloc>::insert(iterator position, size_type n, value_type const & val)
 {
-	this->insert_def_(position,n, val);
+	const size_type		pos_index = position - this->begin();
+
+	this->make_places_to_new_elements(pos_index, n);
+	for(size_type i = 0; i < n; i++) {
+		this->_alloc.construct(this->_array + pos_index + i, val);
+	}
 }
 
 template<class T, class Alloc>
 template <class InputIterator>
 void	vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator last,
-                                 typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type*)
+								typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type*)
 {
-	size_type       pos_index = position - this->begin();
-	size_type const n = std::distance(first, last);
-	size_type       new_capacity;
-	pointer         new_array;
-	
-	// case1: no reallocation
-	if ((this->_capacity - this->_size) >= n)
-	{
-		for(long index = this->_size - 1; index >= (long)pos_index; --index)
-		{
-			this->_alloc.construct(this->_array + index + n, *(this->_array + index));
-			this->_alloc.destroy(this->_array + index);
-		}
-		for(size_type index = 0; index < n; ++index, ++first)
-			this->_alloc.construct(this->_array + pos_index + index, *first);
-		this->_size += n;
-		return ;
-	}
-	
-	// case2: with reallocation
-	new_capacity = get_new_capacity(this->_size + n);
-	new_array = this->_alloc.allocate(new_capacity);
-	
-	for(size_type index = 0; index < pos_index; index++)
-	{
-		this->_alloc.construct(new_array + index, *(this->_array + index));
-		this->_alloc.destroy(this->_array + index);
-	}
-	for(size_type index = 0; index < n; index++, ++first)
-		this->_alloc.construct(new_array + index + pos_index, *first);
-	for(size_type index = pos_index; index < this->_size; index++)
-	{
-		this->_alloc.construct(new_array + index + n, *(this->_array + index));
-		this->_alloc.destroy(this->_array + index);
-	}
+	const size_type		pos_index = position - this->begin();
+	const size_type		n = std::distance(first, last);
 
-	this->_alloc.deallocate(this->_array, this->_capacity);
-	this->_size += n;
-	this->_capacity = new_capacity;
-	this->_array = new_array;
+	this->make_places_to_new_elements(pos_index, n);
+	for(size_type i = 0; i < n; ++i, ++first) {
+		this->_alloc.construct(this->_array + pos_index + i, *first);
+	}
 }
 
 /*
