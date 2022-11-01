@@ -13,18 +13,23 @@ class stack
 {
 protected:
 	// Data members
-	Container	_base_ctnr;
+	Container	c;
 
 public:
 	// Member types
-	typedef T			value_type;
 	typedef Container	container_type;
-	typedef size_t		size_type;
+	typedef typename Container::value_type	value_type;
+	typedef typename Container::size_type	size_type;
+	typedef typename Container::reference	reference;
+	typedef typename Container::const_reference	const_reference;
 	
 public:
-	// constructor
-	explicit stack(container_type const & ctnr = container_type());
-	
+	// Constructors && Destructor && Copy assignment operator
+	explicit stack(container_type const & cont = container_type());
+	stack(stack const & other);
+	stack&	operator=(stack const & other);
+	~stack(void);
+
 	// member functions
 	bool	empty(void) const;
 	size_t	size(void) const;

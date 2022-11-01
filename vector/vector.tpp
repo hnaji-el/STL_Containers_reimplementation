@@ -293,7 +293,7 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iter
 template<class T, class Alloc>
 void	vector<T, Alloc>::push_back(value_type const & val)
 {
-	if (this->_size == 0)
+	if (this->_array == NULL)
 	{
 		this->_size = this->_capacity = 1;
 		this->_array = this->_alloc.allocate(this->_size);
@@ -301,6 +301,7 @@ void	vector<T, Alloc>::push_back(value_type const & val)
 	}
 	else
 		this->insert(this->end(), val);
+
 }
 
 template<class T, class Alloc>
