@@ -119,7 +119,8 @@ public:
 
 private:
 	// Helper member functions:
-	void		make_places_to_new_elements(size_type const pos_index, size_type const n);
+	void	make_places_to_new_elements(size_type const pos_index, size_type const n);
+	void	prepare_array_for_assign(const size_type n);
 	iterator	erase_def_(size_type const pos_index, size_type const n);
 	size_type	get_new_capacity(size_type n);
 };

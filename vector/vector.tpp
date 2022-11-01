@@ -135,31 +135,7 @@ typename vector<T, Alloc>::const_reverse_iterator   vector<T, Alloc>::rend(void)
  */
 
 template<class T, class Alloc>
-template<class InputIterator>
-void	vector<T, Alloc>::assign(InputIterator first, InputIterator last,
-								typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type*)
-{
-	const size_type		new_size = std::distance(first, last);
-
-	for (size_type i = 0; i < this->_size; i++) {
-		this->_alloc.destroy(this->_array + i);
-	}
-
-	if (new_size > this->_capacity) {
-		this->_alloc.deallocate(this->_array, this->_capacity);
-		this->_size = this->_capacity = new_size;
-		this->_array = this->_alloc.allocate(new_size);
-	}
-	else
-		this->_size = new_size;
-
-	for (size_type i = 0; first != last; ++i, ++first) {
-		this->_alloc.construct(this->_array + i, *first);
-	}
-}
-
-template<class T, class Alloc>
-void	vector<T, Alloc>::assign(size_type n, value_type const & val)
+void	vector<T, Alloc>::prepare_array_for_assign(const size_type n)
 {
 	for (size_type i = 0; i < this->_size; i++) {
 		this->_alloc.destroy(this->_array + i);
@@ -170,9 +146,28 @@ void	vector<T, Alloc>::assign(size_type n, value_type const & val)
 		this->_size = this->_capacity = n;
 		this->_array = this->_alloc.allocate(n);
 	}
-	else
+	else {
 		this->_size = n;
+	}
+}
 
+template<class T, class Alloc>
+template<class InputIterator>
+void	vector<T, Alloc>::assign(InputIterator first, InputIterator last,
+								typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type*)
+{
+	const size_type		new_size = std::distance(first, last);
+
+	prepare_array_for_assign(new_size);
+	for (size_type i = 0; first != last; ++i, ++first) {
+		this->_alloc.construct(this->_array + i, *first);
+	}
+}
+
+template<class T, class Alloc>
+void	vector<T, Alloc>::assign(size_type n, value_type const & val)
+{
+	prepare_array_for_assign(n);
 	for (size_type i = 0; i < this->_size; ++i) {
 		this->_alloc.construct(this->_array + i, val);
 	}
