@@ -27,9 +27,9 @@ vector<T, Alloc>::vector(size_type n, value_type const & val, const allocator_ty
 
 template<class T, class Alloc>
 template <class InputIterator>
-vector<T, Alloc>::vector(InputIterator first, InputIterator last,
-						allocator_type const & alloc,
-						typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type*)
+vector<T, Alloc>::vector(InputIterator first,
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last,
+						allocator_type const & alloc)
 	: _array(), _alloc(alloc), _size(), _capacity()
 {
 	this->_size = this->_capacity = std::distance(first, last);
@@ -153,8 +153,8 @@ void	vector<T, Alloc>::prepare_array_for_assign(const size_type n)
 
 template<class T, class Alloc>
 template<class InputIterator>
-void	vector<T, Alloc>::assign(InputIterator first, InputIterator last,
-								typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type*)
+void	vector<T, Alloc>::assign(InputIterator first,
+								typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last)
 {
 	const size_type		new_size = std::distance(first, last);
 
@@ -235,8 +235,9 @@ void	vector<T, Alloc>::insert(iterator position, size_type n, value_type const &
 
 template<class T, class Alloc>
 template <class InputIterator>
-void	vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator last,
-								typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type*)
+void	vector<T, Alloc>::insert(iterator position,
+								InputIterator first,
+								typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last)
 {
 	const size_type		pos_index = position - this->begin();
 	const size_type		n = std::distance(first, last);

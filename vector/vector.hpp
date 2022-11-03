@@ -52,9 +52,9 @@ public:
 					value_type const & val = value_type(),
 					allocator_type const & alloc = allocator_type());
 	template <class InputIterator>
-	vector(InputIterator first, InputIterator last,
-			allocator_type const & alloc = allocator_type(),
-			typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = NULL);
+	vector(InputIterator first,
+			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last,
+			allocator_type const & alloc = allocator_type());
 	vector(vector const & x);
 	~vector(void);
 
@@ -73,16 +73,16 @@ public:
 
 	// Modifiers: [ assign ]
 	template<class InputIterator>
-	void	assign(InputIterator first, InputIterator last,
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = NULL);
+	void	assign(InputIterator first,
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last);
 	void	assign(size_type n, value_type const & val);
 	
 	// Modifiers: [ insert ]
 	iterator	insert(iterator position, value_type const & val);
 	void		insert(iterator position, size_type n, value_type const & val);
 	template<class InputIterator>
-	void		insert(iterator position, InputIterator first, InputIterator last,
-					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = NULL);
+	void		insert(iterator position, InputIterator first,
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last);
 	
 	// Modifiers: [ erase ]
 	iterator	erase(iterator position);
